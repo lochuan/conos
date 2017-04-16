@@ -10,10 +10,10 @@ users_boards = db.Table('users_boards',
 class User(db.Model):
 	__tablename__ = 'users'
 	id = db.Column(db.Integer, primary_key = True)
-	name = db.Column(db.String(64), unique = True, index = True)
+	name = db.Column(db.String(64), index = True)
 	email = db.Column(db.String(64), unique = True)
 	password_hash = db.Column(db.String(128))
-	confirmed = db.Column(db.Boolean, default = False)
+	_confirmed = db.Column(db.Boolean, default = False)
 	boards = db.relationship('Board', secondary = users_boards, backref = 'users') # Also create "users" in Board
 	
 	@property
@@ -23,6 +23,14 @@ class User(db.Model):
 	@password.setter
 	def password(self, password):
 		self.password_hash = generate_password_hash(password)
+
+	@property 
+	def confirmed(self):
+		return self._confirmed
+
+	@confirmed.setter
+	def confirmed(self, value):
+		self._confirmed = value
 		
 	def verify_password(self, password):
 		return check_password_hash(self.password_hash, password)
@@ -33,10 +41,9 @@ class User(db.Model):
 		return auth_token
 		
 	def generate_confirmed_token(self):
-		confirmed_token = jwt.dumps({'id':self.id})
+		confirmed_token = jwt.dumps({'email':self.email})
 		confirmed_token = confirmed_token.decode('utf-8')
 		return confirmed_token
-	
 	
 		
 	def __repr__(self):
