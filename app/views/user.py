@@ -22,8 +22,8 @@ def register():
             auth_token = g.user.generate_auth_token()
             db.session.add(g.user)
             db.session.commit()
-            confirm_token = g.user.generate_confirmed_token()
-            send_email(g.user.email, 'Confirm Your Conos Account', 'confirm', user=g.user.name, token=confirm_token)
+            #confirm_token = g.user.generate_confirmed_token()
+            #send_email(g.user.email, 'Confirm Your Conos Account', 'confirm', user=g.user.name, token=confirm_token)
             responseObject = {
                     'status': 'success',
                     'message': 'Successfully registered. Confirm mail sent',

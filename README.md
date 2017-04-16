@@ -37,7 +37,7 @@ POST Format: {"email":"bar@foo.com"}
 The client post the user's email to here, then the server will regenerate a random 6 digits new password and send it to user's email address.
 
 
-### Board
+### Board and member
 #### Add a board
 
 ```
@@ -66,3 +66,25 @@ Method: PUT
 PUT Format: {"board_id":"integer", "board_name":"new name"}
 ```
 
+#### Get the members from a board
+```
+URL:http://166.62.32.120:5000/board/member/<int: board_id>
+Method: GET
+```
+Example: if you request http://166.62.32.120:5000/board/member/1, the members in the board (board_id == 1) will return
+
+#### Add member to a board
+```
+URL:http://166.62.32.120:5000/board/member/
+Method: POST
+POST Format: {"user_email":"foo@bar.com", "board_id":"1"}
+```
+Above POST will add foo@bar.com to board with its id == 1
+
+#### Delete member from a board
+```
+URL:http://166.62.32.120:5000/board/member/
+Method: Delete
+POST Format: {"user_email":"foo@bar.com", "board_id":"1"}
+```
+Above DELETE operation will remove user foo@bar.com from board with its id == 1, if you want to leave a board, you can POST like this: {"user_email":"your@email.com","board_id":"1"}
