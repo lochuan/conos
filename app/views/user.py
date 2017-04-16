@@ -6,47 +6,51 @@ from ..email import send_email
 
 user = Blueprint('user', __name__)
 
-@user.route('/register', methods=['POST'])
+@user.route('/register/', methods=['POST'])
 def register():
-	g.user=None
-	if not request.json or not 'email' and 'password' in request.json:
-		responseObject = {
-				'status': 'fail',
-				'message': 'Name, Email, or Password is missed'
-			}
-		return make_response(jsonify(responseObject)), 400
-	g.user = User.query.filter_by(email=request.json['email']).first()
-	if not g.user:
-		try:
-			g.user = User(name=request.json['username'], email=request.json['email'], password=request.json['password'])
-			confirm_token = g.user.generate_confirmed_token()
-			send_email(g.user.email, 'Confirm Your Conos Account', 'confirm', user=g.user, token=confirm_token)
-			auth_token = g.user.generate_auth_token()
-			db.session.add(g.user)
-			db.session.commit()
-			responseObject = {
+    g.user=None
+    if not request.json or not 'email' and 'password' in request.json:
+        responseObject = {
+                'status': 'fail',
+                'message': 'Name, Email, or Password is missed'
+            }
+        return make_response(jsonify(responseObject)), 400
+    g.user = User.query.filter_by(email=request.json['email']).first()
+    if not g.user:
+        try:
+            g.user = User(name=request.json['username'], email=request.json['email'], password=request.json['password'])
+            auth_token = g.user.generate_auth_token()
+            db.session.add(g.user)
+            db.session.commit()
+            confirm_token = g.user.generate_confirmed_token()
+            send_email(g.user.email, 'Confirm Your Conos Account', 'confirm', user=g.user.name, token=confirm_token)
+            responseObject = {
                     'status': 'success',
                     'message': 'Successfully registered. Confirm mail sent',
                     'token': auth_token
                 }
-			return make_response(jsonify(responseObject)), 201
-			
-		except Exception as e:
-			responseObject = {
-						'status': 'fail',
-						'message': 'Some error occurred. Please try again.',
-						'error': str(e)
-			}
-			return make_response(jsonify(responseObject)), 401
-	else:
-		responseObject = {
-				'status': 'fail',
-				'message': 'User already exists. Please Log in.',
-		}
-		return make_response(jsonify(responseObject)), 202
+            return make_response(jsonify(responseObject)), 201
+            
+        except Exception as e:
+            responseObject = {
+                        'status': 'fail',
+                        'message': 'Some error occurred. Please try again.',
+                        'error': str(e),
+                        'info': request.json['username'],
+                        'info2': request.json['email']
+            }
+            return make_response(jsonify(responseObject)), 401
+        confirm_token = g.user.generate_confirmed_token()
+        send_email(g.user.email, 'Confirm Your Conos Account', 'confirm', user=g.user.name, token=confirm_token)
+    else:
+        responseObject = {
+                'status': 'fail',
+                'message': 'User already exists. Please Log in.',
+        }
+        return make_response(jsonify(responseObject)), 202
 
-		
-@user.route('/get_token', methods=['POST'])
+        
+@user.route('/get_token/', methods=['POST'])
 def send_token():
     if not request.json or not 'email' and 'password' in request.json:
         responseObject = {
@@ -77,7 +81,7 @@ def send_token():
             }
             return make_response(jsonify(responseObject)), 400
 
-@user.route('/get_confirm_mail', methods=['POST'])
+@user.route('/get_confirm_mail/', methods=['POST'])
 def send_confirm_mail():
     g.user=None
     if not request.json or not 'email' in request.json:
@@ -102,7 +106,7 @@ def send_confirm_mail():
             }
         return make_response(jsonify(responseObject)), 200
 
-@user.route('/forget_password', methods=['POST'])
+@user.route('/forget_password/', methods=['POST'])
 def send_new_password():
     g.user=None
     if not request.json or not 'email' in request.json:
@@ -136,7 +140,7 @@ def confirm(token):
         data = jwt.loads(token)
         if 'email' in data:
             g.user = User.query.filter_by(email=data['email']).first()
-            g.user.confirmed = True
+            g.user.confirmed = 1
             db.session.commit()
             responseObject = {
                 'status': 'success',
@@ -152,9 +156,10 @@ def confirm(token):
     except Exception as e:
         responseObject = {
             'status': 'fail',
-            'message': 'Given confirmation info is not a right type'
+            'message': 'Confirmation info is not a right type'
         }
-        	
+        return make_response(jsonify(responseObject)), 400
+            
 @auth.verify_token
 def verify_token(token):
     g.user = None
@@ -166,13 +171,3 @@ def verify_token(token):
         g.user = User.query.filter_by(email=data['user_email']).first()
         return True
     return False
-
-@app.route('/', methods['GET'])
-@auth.login_required
-def index():
-    pass
-
-@app.route('/', methods['POST'])
-@auth.login_required
-def index():
-    pass

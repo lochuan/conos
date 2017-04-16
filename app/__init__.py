@@ -13,4 +13,6 @@ jwt = JWT(app.config['SECRET_KEY'], expires_in=3600, algorithm_name='HS256')
 auth = HTTPTokenAuth('Bearer')
 
 from .views.user import user
+from .views.board import board
 app.register_blueprint(user, url_prefix='/user')
+app.register_blueprint(board, url_prefix='/board')
