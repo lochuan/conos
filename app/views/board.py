@@ -78,11 +78,12 @@ def update_board():
 			}
 		return make_response(jsonify(responseObject)), 400
 	g.board = Board.query.filter_by(id=request.json['board_id']).first()
+	old_name = g.board.name
 	g.board.name = request.json['board_name']
 	db.session.commit()
 	responseObject = {
 				'status': 'success',
-				'message': 'You changed board name to %s' % g.board.name
+				'message': 'The board name have changed from %s to %s' % (old_name, g.board.name)
 			}
 	return make_response(jsonify(responseObject)), 400
 
@@ -158,6 +159,6 @@ def delete_member():
 		db.session.commit()
 		responseObject = {
 				'status': 'success',
-				'message': '%s added in the %s' % (g.user.name, g.board.name)
+				'message': '%s deleted from the %s' % (g.user.name, g.board.name)
 			}
 		return make_response(jsonify(responseObject)), 200
