@@ -1,10 +1,28 @@
+import time
 from random import sample
-from .. import app, db, auth, jwt
+from .. import app, db, auth, jwt_lt
 from flask import request, jsonify, make_response, g, Blueprint
 from ..models import User
 from ..email import send_email
+from itsdangerous import TimedJSONWebSignatureSerializer as JWT_REFRESH
+
 
 user = Blueprint('user', __name__)
+
+@auth.verify_token
+def verify_token(token):
+    g.user = None
+    try:
+        data = jwt_lt.loads(token, return_header=True)
+    except:
+        return False
+    if 'user_email' and 'user_name' and 'user_id' in data[0]:
+        g.user = User.query.filter_by(email=data[0]['user_email']).first()
+        new_exp = int(data[1]['exp']) - int(time.time()) + 3600
+        g.token = JWT_REFRESH(app.config['SECRET_KEY'], expires_in=new_exp, algorithm_name='HS256').dumps({'user_id': data[0]['user_id'], 'user_name': data[0]['user_name'], 'user_email': data[0]['user_email']})
+        g.token = g.token.decode('utf-8')
+        return True
+    return False
 
 @user.route('/register/', methods=['POST'])
 def register():
@@ -15,7 +33,15 @@ def register():
                 'message': 'Name, Email, or Password is missed'
             }
         return make_response(jsonify(responseObject)), 400
-    g.user = User.query.filter_by(email=request.json['email']).first()
+    try:
+        g.user = User.query.filter_by(email=request.json['email']).first()
+    except Exception as e:
+        responseObject = {
+                'status': 'fail',
+                'message': 'database query error',
+                'error': str(e)
+        }
+        return jsonify(responseObject), 500
     if not g.user:
         try:
             g.user = User(name=request.json['username'], email=request.json['email'], password=request.json['password'])
@@ -26,7 +52,7 @@ def register():
             #send_email(g.user.email, 'Confirm Your Conos Account', 'confirm', user=g.user.name, token=confirm_token)
             responseObject = {
                     'status': 'success',
-                    'message': 'Successfully registered. Confirm mail sent',
+                    'message': 'Successfully registered. Confirmation mail has been sent to %s' % g.user.email,
                     'token': auth_token
                 }
             return make_response(jsonify(responseObject)), 201
@@ -34,10 +60,7 @@ def register():
         except Exception as e:
             responseObject = {
                         'status': 'fail',
-                        'message': 'Some error occurred. Please try again.',
-                        'error': str(e),
-                        'info': request.json['username'],
-                        'info2': request.json['email']
+                        'message': 'Some error occurred. Please try again.',                  
             }
             return make_response(jsonify(responseObject)), 401
         confirm_token = g.user.generate_confirmed_token()
@@ -58,8 +81,19 @@ def send_token():
                 'message': 'Email, or Password is missed'
             }
         return make_response(jsonify(responseObject)), 400
+
     g.user=None
-    g.user = User.query.filter_by(email=request.json['email']).first()
+
+    try:
+        g.user = User.query.filter_by(email=request.json['email']).first()
+    except Exception as e:
+        responseObject = {
+                'status': 'fail',
+                'message': 'database query error',
+                'error': str(e)
+        }
+        return jsonify(responseObject), 500
+
     if g.user == None:
             responseObject = {
                 'status': 'fail',
@@ -90,7 +124,15 @@ def send_confirm_mail():
                 'message': 'Give an email address please.'
             }
         return make_response(jsonify(responseObject)), 400
-    g.user = User.query.filter_by(email=request.json['email']).first()
+    try:
+        g.user = User.query.filter_by(email=request.json['email']).first()
+    except Exception as e:
+        responseObject = {
+                'status': 'fail',
+                'message': 'database query error',
+                'error': str(e)
+        }
+        return jsonify(responseObject), 500
     if g.user == None:
         responseObject = {
                 'status': 'fail',
@@ -115,7 +157,15 @@ def send_new_password():
                 'message': 'Give an email address please.'
             }
         return make_response(jsonify(responseObject)), 400
-    g.user = User.query.filter_by(email=request.json['email']).first()
+    try:
+        g.user = User.query.filter_by(email=request.json['email']).first()
+    except Exception as e:
+        responseObject = {
+                'status': 'fail',
+                'message': 'database query error',
+                'error': str(e)
+        }
+        return jsonify(responseObject), 500
     if g.user == None:
         responseObject = {
                 'status': 'fail',
@@ -156,18 +206,7 @@ def confirm(token):
     except Exception as e:
         responseObject = {
             'status': 'fail',
-            'message': 'Confirmation info is not a right type'
+            'message': 'Confirmation link is wrong or expired'
         }
         return make_response(jsonify(responseObject)), 400
             
-@auth.verify_token
-def verify_token(token):
-    g.user = None
-    try:
-        data = jwt.loads(token)
-    except:
-        return False
-    if 'user_email' and 'user_name' and 'user_id' in data:
-        g.user = User.query.filter_by(email=data['user_email']).first()
-        return True
-    return False

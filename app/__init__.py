@@ -9,7 +9,8 @@ app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 mail = Mail(app)
-jwt = JWT(app.config['SECRET_KEY'], expires_in=3600, algorithm_name='HS256')
+jwt_st = JWT(app.config['SECRET_KEY'], expires_in=3600, algorithm_name='HS256')
+jwt_lt = JWT(app.config['SECRET_KEY'], expires_in=604800, algorithm_name='HS256')
 auth = HTTPTokenAuth('Bearer')
 
 from .views.user import user

@@ -1,4 +1,4 @@
-from . import db, jwt
+from . import db, jwt_st, jwt_lt
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
@@ -41,12 +41,12 @@ class User(db.Model):
         return check_password_hash(self.password_hash, password)
         
     def generate_auth_token(self):
-        auth_token = jwt.dumps({'user_id': self.id, 'user_name': self.name, 'user_email': self.email})
+        auth_token = jwt_lt.dumps({'user_id': self.id, 'user_name': self.name, 'user_email': self.email})
         auth_token = auth_token.decode('utf-8')
         return auth_token
         
     def generate_confirmed_token(self):
-        confirmed_token = jwt.dumps({'email':self.email})
+        confirmed_token = jwt_st.dumps({'email':self.email})
         confirmed_token = confirmed_token.decode('utf-8')
         return confirmed_token
     
