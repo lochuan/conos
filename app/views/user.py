@@ -172,6 +172,12 @@ def send_new_password():
                 'message': 'No such Email'
             }
         return make_response(jsonify(responseObject)), 400
+    elif g.user.confirmed == 0:
+        responseObject = {
+                'status': 'fail',
+                'message': 'Your email have not confirmed yet, Please confirm your email first'
+        }
+        return jsonify(responseObject), 400
     else:
         new_password = ''.join(sample('0123456789', 6))
         g.user.password = new_password

@@ -1,3 +1,104 @@
+# Conos
+
+## Mission Tracking
+
+### Enviroment Configuration and Initialization
+
+- [x] Python3 
+- [x] Virtualenv
+- [x] Flask
+- [x] Mysql
+- [ ] Redis
+- [ ] Gnicorn
+- [ ] Nginx
+- [x] Mysql
+- [ ] Docker
+
+### Database Implementation
+
+- [x] user table
+- [x] board table
+- [x] todo table
+- [x] todo-ongoing table
+- [x] todo-done table
+- [ ] memo table
+- [ ] meetup table
+- [ ] file sharing table
+- [x] user-board relation
+- [ ] user-todo relation
+- [ ] user-memo relation
+- [ ] user-file-sharing relation
+- [ ] user-meetup-board relation
+
+### Module develepment
+
+- User Management
+  - [x] Register
+  - [x] Token dispatch
+  - [x] User confirmation by mail
+  - [x] Send confimation mail
+  - [x] Forget password
+  - [ ] Personal Profile
+  - [ ] SNS-similar feature
+
+- Board Management
+  - [x] Add board
+  - [x] Delete board
+  - [x] Add a member to a board
+  - [x] Remove a member from board
+  - [ ] Board status
+  - [ ] Board sharing
+  
+- Todo Management
+  - [ ] Add todo
+  - [ ] Delete toto
+  - [ ] Move toto to ongoing
+  - [ ] Move ongoing to done
+  - [ ] Thanks someone who done a good job
+  - [ ] Status tracking
+  - [ ] Statistical Report
+
+- Memo Management
+  - [ ] Add memo
+  - [ ] Delete memo
+  - [ ] Edit memo
+  - [ ] Memo sharing
+
+
+- Attachment Management
+  - [ ] Add attah
+  - [ ] Delete attach
+
+- Notification
+  - [ ] Get user's device key
+  - [ ] Firebase connect
+  - [ ] Individual Push
+  - [ ] Group Push
+
+### Testing
+
+- Register
+- Token dispatch
+- User confirmation by mail
+- Send confimation mail
+- Forget password
+- Add board
+- Delete board
+- Add a member to a board
+- Remove a member from board
+
+
+### Deployment
+
+- [ ] Change run level from test to production
+- [ ] Gnicorn and Nginx configuration
+- [ ] Packing project and config file to Docker image
+- [ ] Multi-WSGI if needed
+- [ ] QoS load balancing if needed
+
+
+
+
 ## Conos API Spec
 
 ### Authorization and Authentication
