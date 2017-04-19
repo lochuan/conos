@@ -1,6 +1,4 @@
-# Conos
-
-## Mission Tracking
+# Mission Tracking
 
 ### Enviroment Configuration and Initialization
 
@@ -99,7 +97,7 @@
 
 
 
-## Conos API Spec
+# Conos API Spec
 
 ### Authorization and Authentication
 
