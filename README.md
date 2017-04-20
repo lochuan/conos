@@ -9,7 +9,6 @@
 - [ ] Redis
 - [ ] Gnicorn
 - [ ] Nginx
-- [x] Mysql
 - [ ] Docker
 
 ### Database Implementation
