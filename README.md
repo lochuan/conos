@@ -55,6 +55,13 @@
   - [ ] Status tracking
   - [ ] Statistical Report
 
+- Meetup Management
+  - [ ] Call for a meetup
+  - [ ] Get feedback from others
+  - [ ] Create meetup
+  - [ ] Remove meetup automatically if expired
+
+
 - Memo Management
   - [ ] Add memo
   - [ ] Delete memo
