@@ -114,7 +114,7 @@ URL: http://166.62.32.120:5000/user/register/
 Method: POST
 POST Format: {"username":"foo", "email":"bar@foo.com", "password":"bar"}
 Response: {
-  "message": "Successfully registered. Confirm mail sent",
+  "message": "Successfully registered. Confirmation mail has been sent",
   "status": "success",
   "token": "eyJleHAiOjE0OTIzOTY1OTAsImFsZyI6IkhTMjU2IiwiaWF0IjoxNDkyMzkyOTkwfQ.eyJ1c2VyX25hbWUiOiJMb2NodWFuIiwidXNlcl9pZCI6bnVsbCwidXNlcl9lbWFpbCI6ImxvY2h1YW5AbmF2ZXIuY29tIn0.RmOjU--MtwYQYleYEFTto6jz97mdhf16njxhTL1nSIc"
 }
