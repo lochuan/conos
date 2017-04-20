@@ -1,6 +1,6 @@
 import time
 from random import sample
-from .. import app, db, auth, jwt_lt
+from .. import app, db, auth, jwt_lt, jwt_st
 from flask import request, jsonify, make_response, g, Blueprint
 from ..models import User
 from ..email import send_email
@@ -48,8 +48,8 @@ def register():
             auth_token = g.user.generate_auth_token()
             db.session.add(g.user)
             db.session.commit()
-            #confirm_token = g.user.generate_confirmed_token()
-            #send_email(g.user.email, 'Confirm Your Conos Account', 'confirm', user=g.user.name, token=confirm_token)
+            confirm_token = g.user.generate_confirmed_token()
+            send_email(g.user.email, 'Confirm Your Conos Account', 'confirm', user=g.user.name, token=confirm_token)
             responseObject = {
                     'status': 'success',
                     'message': 'Successfully registered. Confirmation mail has been sent to %s' % g.user.email,
@@ -193,26 +193,14 @@ def send_new_password():
 def confirm(token):
     g.user = None
     try:
-        data = jwt.loads(token)
+        data = jwt_st.loads(token)
         if 'email' in data:
             g.user = User.query.filter_by(email=data['email']).first()
             g.user.confirmed = 1
             db.session.commit()
-            responseObject = {
-                'status': 'success',
-                'message': '%s has been confirmed' % g.user.email
-            }
-            return make_response(jsonify(responseObject)), 200
+            return make_response("<h2>Your email: %s has been confirmed!</h2>" % g.user.email), 200
         else:
-            responseObject = {
-                'status': 'fail',
-                'message': 'Confirm information can not match',
-            }
-            return make_response(jsonify(responseObject)), 400
+            return make_response("<h2>Confirmation Info Error</h2>"), 400
     except Exception as e:
-        responseObject = {
-            'status': 'fail',
-            'message': 'Confirmation link is wrong or expired'
-        }
-        return make_response(jsonify(responseObject)), 400
+        return make_response("<h2>Confimation link is wrong or expired</h2>"), 400
             
