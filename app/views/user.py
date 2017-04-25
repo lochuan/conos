@@ -2,7 +2,7 @@ import time
 from random import sample
 from .. import app, db, auth, jwt_lt, jwt_st
 from flask import request, jsonify, make_response, g, Blueprint
-from ..models import User
+from ..models import User, Todo, Todo_Ongoing, Todo_Done, Board, Thanks
 from ..email import send_email
 from itsdangerous import TimedJSONWebSignatureSerializer as JWT_REFRESH
 
@@ -115,6 +115,50 @@ def send_token():
             }
             return make_response(jsonify(responseObject)), 400
 
+@user.route('/change_password/', methods=['POST'])
+def change_password():
+    if not request.json or not 'email' in request.json or not 'old_password' in request.json or not 'new_password' in request.json:
+        responseObject = {
+                'status': 'fail',
+                'message': 'Wrong data received'
+            }
+        return make_response(jsonify(responseObject)), 400
+
+    g.user=None
+
+    try:
+        g.user = User.query.filter_by(email=request.json['email']).first()
+    except Exception as e:
+        responseObject = {
+                'status': 'fail',
+                'message': 'database query error',
+                'error': str(e)
+        }
+        return jsonify(responseObject), 500
+
+    if g.user == None:
+            responseObject = {
+                'status': 'fail',
+                'message': 'No such Email'
+            }
+            return make_response(jsonify(responseObject)), 400
+    else:
+        if g.user.verify_password(request.json['old_password']):
+            g.user.password = request.json['new_password']
+            db.session.commit()
+            responseObject = {
+                'status': 'success',
+                'message': 'Password has changed successfully',
+                'token': g.user.generate_auth_token()
+            }
+            return make_response(jsonify(responseObject)), 200
+        else:
+            responseObject = {
+                'status': 'fail',
+                'message': 'Old password does not match',
+            }
+            return make_response(jsonify(responseObject)), 400
+
 @user.route('/get_confirm_mail/', methods=['POST'])
 def send_confirm_mail():
     g.user=None
@@ -147,7 +191,6 @@ def send_confirm_mail():
                 'message': 'Confirmation mail has been sent to %s' % g.user.email
             }
         return make_response(jsonify(responseObject)), 200
-
 @user.route('/forget_password/', methods=['POST'])
 def send_new_password():
     g.user=None
@@ -204,3 +247,48 @@ def confirm(token):
     except Exception as e:
         return make_response("<h2>Confimation link is wrong or expired</h2>"), 400
             
+
+@user.route('/', methods=['GET'])
+@auth.login_required
+def send_user_profile():
+    todo_list = []
+    todo_ongoing_list = []
+    thanks_from_list = []
+    board_list = []
+    todo_done_list = []
+    for todo in g.user.todos:
+        if todo.board_id == None:
+            db.session.delete(todo)
+            continue
+        todo_info = {
+            'todo_id':todo.id,
+            'todo_item': todo.item,
+            'in_board': todo.board_id,
+            'todo_last_changed_time': todo.last_changed_time
+        }
+        todo_list.append(todo_info)
+    for todo_ongoing in g.user.todos_ongoing:
+        if todo_ongoing.board_id == None:
+            db.session.delete(todo_ongoing)
+            continue
+        todo_ongoing_info = {
+            'todo_ongoing_id': todo_ongoing.id,
+            'todo_ongoing_item': todo_ongoing.item,
+            'in_board': todo_ongoing.board_id
+
+        }
+        todo_ongoing_list.append(todo_ongoing_info)
+    for todo_done in g.user.todos_done:
+        todo_done_info = {
+            'todo_done_id': todo_done.id,
+            'todo_done_item': todo_done.item,
+        }
+        todo_done_list.append(todo_done_info)
+    for board in g.user.boards:
+        board_info = {
+            'board_id': board.id,
+            'board_name': board.name
+        }
+        board_list.append(board_info)
+    db.session.commit()
+    return jsonify({"thanks_received": g.user.thanks_received, "todo":todo_list, "todos_ongoing": todo_ongoing_list, "todos_done":todo_done_list}), 200

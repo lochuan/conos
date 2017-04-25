@@ -20,6 +20,7 @@ class User(db.Model):
     todos_ongoing = db.relationship('Todo_Ongoing', backref = 'user')
     todos_done = db.relationship('Todo_Done', backref = 'user')
     memos = db.relationship('Memo', backref = 'user')
+    thanks_to = db.relationship('Thanks', backref = 'user')
 
     @property
     def password(self):
@@ -75,6 +76,7 @@ class Todo(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     item = db.Column(db.Unicode(128))
     created_time = db.Column(db.DateTime, default=datetime.utcnow)
+    last_changed_time = db.Column(db.DateTime, default=datetime.utcnow)
     board_id = db.Column(db.Integer, db.ForeignKey('boards.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     
@@ -110,4 +112,10 @@ class Memo(db.Model):
     content = db.Column(db.UnicodeText)
     created_time = db.Column(db.DateTime, default=datetime.utcnow)
     board_id = db.Column(db.Integer, db.ForeignKey('boards.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+class Thanks(db.Model):
+    __tablename__ = 'thanks'
+    id = db.Column(db.Integer, primary_key = True)
+    done_id = db.Column(db.Integer, nullable = False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
