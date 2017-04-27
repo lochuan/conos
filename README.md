@@ -1,7 +1,7 @@
 
 # Conos API Spec
 
-###URLs
+### URLs
 
 ```
 /user/
@@ -132,7 +132,7 @@ Response:{
 }
 ```
 
-###Member
+### Member
 
 #### Add member to a board
 
@@ -162,9 +162,9 @@ Response:{
 ```
 Above DELETE operation will remove user foo@bar.com from board with its id == 1, if you want to leave a board, you can POST like this: {"user_email":"your@email.com","board_id":"1"}
 
-###Todo
+### Todo
 
-####Add a todo to a board
+#### Add a todo to a board
 
 ```
 URL:http://166.62.32.120:5000/todo/
@@ -176,7 +176,7 @@ Response: {
   "token": "eyJpYXQiOjE0OTMyODczNzksImV4cCI6MTQ5Mzg5NDQ3NCwiYWxnIjoiSFMyNTYifQ.eyJ1c2VyX2VtYWlsIjoic29tZTFAZ29vZC5jb20iLCJ1c2VyX2lkIjpudWxsLCJ1c2VyX25hbWUiOiJsb2NodWFuIn0.m9iYylS15i7WBv9OIw-w7xDPW1-wOPgTxMNKVGUxT58"
 }
 ```
-####Delete a todo
+#### Delete a todo
 
 ```
 URL:http://166.62.32.120:5000/todo/
@@ -190,7 +190,7 @@ Response: {
 ```
 Only the todo_id is needed for deleting, the server can detect which board the todo belongs to, so you don't need to give a board_id.
 
-####Change name of a todo
+#### Change name of a todo
 
 ```
 URL:http://166.62.32.120:5000/todo/
@@ -203,7 +203,7 @@ Response: {
 }
 ```
 
-####Move todo to ongoing
+#### Move todo to ongoing
 
 ```
 URL:http://166.62.32.120:5000/todo/move_to_ongoing/
@@ -216,7 +216,7 @@ Response: {
 }
 ```
 
-####Move ongoing to done
+#### Move ongoing to done
 
 ```
 URL:http://166.62.32.120:5000/todo/move_to_done/
@@ -228,7 +228,7 @@ Response: {
   "token": "eyJhbGciOiJIUzI1NiIsImlhdCI6MTQ5MzI4ODgxNCwiZXhwIjoxNDkzODk0NDc0fQ.eyJ1c2VyX25hbWUiOiJsb2NodWFuIiwidXNlcl9lbWFpbCI6InNvbWUxQGdvb2QuY29tIiwidXNlcl9pZCI6bnVsbH0.DbuTArT7X9oGblWWCiJiDmSTYn7zxfei7hqt6hRPm9g"
 }
 ```
-####Thankyou
+#### Thankyou
 
 ```
 URL:http://166.62.32.120:5000/todo/thankyou/
@@ -241,9 +241,9 @@ Response:{
 }
 ```
 
-###Memo
+### Memo
 
-####Add a memo to a board
+#### Add a memo to a board
 
 ```
 URL:http://166.62.32.120:5000/memo/
@@ -255,7 +255,7 @@ Response:{
   "token": "eyJleHAiOjE0OTM4OTQ0NzQsImlhdCI6MTQ5MzI5MDgwOSwiYWxnIjoiSFMyNTYifQ.eyJ1c2VyX2lkIjpudWxsLCJ1c2VyX25hbWUiOiJsb2NodWFuIiwidXNlcl9lbWFpbCI6InNvbWUxQGdvb2QuY29tIn0.6gzyItfoNuQ4P-8sAvkwmM8g3U5n8p1l0RPa-MdifrA"
 }
 ```
-####Delete a memo
+#### Delete a memo
 
 ```
 URL:http://166.62.32.120:5000/memo/
@@ -267,7 +267,7 @@ Response:{
   "token": "eyJpYXQiOjE0OTMyOTEwMDgsImV4cCI6MTQ5Mzg5NDQ3NCwiYWxnIjoiSFMyNTYifQ.eyJ1c2VyX25hbWUiOiJsb2NodWFuIiwidXNlcl9lbWFpbCI6InNvbWUxQGdvb2QuY29tIiwidXNlcl9pZCI6bnVsbH0.4QJEzcurmRNH5NT-HjYMgheUGoe4Bg5biJ51fcPY-Cc"
 }
 ```
-####Update a memo
+#### Update a memo
 
 ```
 URL:http://166.62.32.120:5000/memo/
@@ -280,7 +280,7 @@ Response:{
 }
 ```
 
-###Get all of the information from this API(Don't forget the token)
+### Get all the information for a user
 
 ```
 URL:http://166.62.32.120:5000/user/
