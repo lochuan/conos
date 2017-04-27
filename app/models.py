@@ -15,12 +15,16 @@ class User(db.Model):
     password_hash = db.Column(db.String(128))
     _confirmed = db.Column(db.SmallInteger, default = 0)
     thanks_received = db.Column(db.Integer, default = 0)
+    todos_created_num = db.Column(db.Integer, default = 0)
+    todos_done_num = db.Column(db.Integer, default = 0)
+    memos_created_num = db.Column(db.Integer, default = 0)
     boards = db.relationship('Board', secondary = users_boards, backref = db.backref('users', lazy = 'dynamic')) # Also create "users" in Board
     todos = db.relationship('Todo', backref = 'user')
     todos_ongoing = db.relationship('Todo_Ongoing', backref = 'user')
     todos_done = db.relationship('Todo_Done', backref = 'user')
     memos = db.relationship('Memo', backref = 'user')
     thanks_to = db.relationship('Thanks', backref = 'user')
+    device_token = db.Column(db.String(128), default = None)
 
     @property
     def password(self):
@@ -51,71 +55,55 @@ class User(db.Model):
         confirmed_token = confirmed_token.decode('utf-8')
         return confirmed_token
     
-        
-    def __repr__(self):
-        return '<User %r>' % self.username      
-
-        
 class Board(db.Model):
     __tablename__ = 'boards'
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.Unicode(64))
     created_time = db.Column(db.DateTime, default=datetime.utcnow)
-    todos = db.relationship('Todo', backref = 'board')
-    todos_ongoing = db.relationship('Todo_Ongoing', backref = 'board')
+    todos = db.relationship('Todo', backref = 'board', passive_deletes=True)
+    todos_ongoing = db.relationship('Todo_Ongoing', backref = 'board', passive_deletes=True)
     todos_done = db.relationship('Todo_Done', backref = 'board')
-    memos = db.relationship('Memo', backref = 'board')
+    memos = db.relationship('Memo', backref = 'board', passive_deletes=True)
     
-    def __repr__(self):
-        return '<Role %r>' % self.name
-
-
-
 class Todo(db.Model):
     __tablename__ = 'todos'
     id = db.Column(db.Integer, primary_key = True)
     item = db.Column(db.Unicode(128))
     created_time = db.Column(db.DateTime, default=datetime.utcnow)
     last_changed_time = db.Column(db.DateTime, default=datetime.utcnow)
-    board_id = db.Column(db.Integer, db.ForeignKey('boards.id'))
+    board_id = db.Column(db.Integer, db.ForeignKey('boards.id', ondelete='CASCADE'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    
-    def __repr__(self):
-        return 
 
 class Todo_Ongoing(db.Model):
     __tablename__ = 'todos_ongoing'
     id = db.Column(db.Integer, primary_key = True)
     item = db.Column(db.Unicode(128))
     created_time = db.Column(db.DateTime, default=datetime.utcnow)
-    board_id = db.Column(db.Integer, db.ForeignKey('boards.id'))
+    board_id = db.Column(db.Integer, db.ForeignKey('boards.id', ondelete='CASCADE'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    
-    def __repr__(self):
-        return 
 
 class Todo_Done(db.Model):
     __tablename__ = 'todos_done'
     id = db.Column(db.Integer, primary_key = True)
     item = db.Column(db.Unicode(128))
+    thanks_received = db.Column(db.Integer, default = 0)
     created_time = db.Column(db.DateTime, default=datetime.utcnow)
     board_id = db.Column(db.Integer, db.ForeignKey('boards.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    thanks_from = db.relationship('Thanks', backref='todo_done')
     
-    def __repr__(self):
-        return 
-
 class Memo(db.Model):
     __tablename__ = 'memos'
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.Unicode(128))
     content = db.Column(db.UnicodeText)
     created_time = db.Column(db.DateTime, default=datetime.utcnow)
-    board_id = db.Column(db.Integer, db.ForeignKey('boards.id'))
+    board_id = db.Column(db.Integer, db.ForeignKey('boards.id', ondelete='CASCADE'))
+    last_changed_time = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 class Thanks(db.Model):
     __tablename__ = 'thanks'
     id = db.Column(db.Integer, primary_key = True)
-    done_id = db.Column(db.Integer, nullable = False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    done_id = db.Column(db.Integer, db.ForeignKey('todos_done.id'))
