@@ -1,5 +1,5 @@
 from random import sample
-from .. import app, db, auth, jwt_lt, jwt_st
+from .. import app, db, auth, jwt_st
 from flask import request, jsonify, make_response, g, Blueprint
 from ..models import User, Todo, Todo_Ongoing, Todo_Done, Board, Thanks
 from ..email import send_email
@@ -273,6 +273,7 @@ def send_user_profile():
             todo_done_list = []
             member_list = []
             memo_list = []
+            meetup_list = []
             for todo in board.todos:
                 todo_info = {
                     'todo_id':todo.id,
@@ -335,6 +336,16 @@ def send_user_profile():
                 if memo_info in memo_list:
                     continue
                 memo_list.append(memo_info)
+            for meetup in board.meetup_times:
+                meetup_info = {
+                    'user': meetup.user.name,
+                    'user_id': meetup.user.id,
+                    'start_time': meetup.start_time,
+                    'end_time': meetup.end_time
+                }
+                if meetup_info in meetup_list:
+                    continue
+                meetup_list.append(meetup_info)
             board_info = {
                 'board_id': board.id,
                 'board_name': board.name,
@@ -342,7 +353,11 @@ def send_user_profile():
                 'todos_ongoing': todo_ongoing_list,
                 'todos_done': todo_done_list,
                 'members': member_list,
-                'memos': memo_list
+                'memos': memo_list,
+                'meetup_status': board.meetup_status,
+                'meetup_location': board.meetup_location,
+                'meetup_time': board.meetup_time,
+                'meetup_user_responses': meetup_list
             }
             board_list.append(board_info)
 

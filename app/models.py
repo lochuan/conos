@@ -9,22 +9,23 @@ users_boards = db.Table('users_boards',
 
 class User(db.Model):
     __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.Unicode(64), index = True)
-    email = db.Column(db.String(64), unique = True)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Unicode(64), index=True)
+    email = db.Column(db.String(64), unique=True)
     password_hash = db.Column(db.String(128))
-    _confirmed = db.Column(db.SmallInteger, default = 0)
-    thanks_received = db.Column(db.Integer, default = 0)
-    todos_created_num = db.Column(db.Integer, default = 0)
-    todos_done_num = db.Column(db.Integer, default = 0)
-    memos_created_num = db.Column(db.Integer, default = 0)
-    boards = db.relationship('Board', secondary = users_boards, backref = db.backref('users', lazy = 'dynamic')) # Also create "users" in Board
-    todos = db.relationship('Todo', backref = 'user')
-    todos_ongoing = db.relationship('Todo_Ongoing', backref = 'user')
-    todos_done = db.relationship('Todo_Done', backref = 'user')
-    memos = db.relationship('Memo', backref = 'user')
-    thanks_to = db.relationship('Thanks', backref = 'user')
-    device_token = db.Column(db.String(128), default = None)
+    _confirmed = db.Column(db.SmallInteger, default=0)
+    thanks_received = db.Column(db.Integer, default=0)
+    todos_created_num = db.Column(db.Integer, default=0)
+    todos_done_num = db.Column(db.Integer, default=0)
+    memos_created_num = db.Column(db.Integer, default=0)
+    boards = db.relationship('Board', secondary=users_boards, backref=db.backref('users', lazy='dynamic')) # Also create "users" in Board
+    todos = db.relationship('Todo', backref='user')
+    todos_ongoing = db.relationship('Todo_Ongoing', backref='user')
+    todos_done = db.relationship('Todo_Done', backref='user')
+    memos = db.relationship('Memo', backref='user')
+    thanks_to = db.relationship('Thanks', backref='user')
+    meetup_times = db.relationship('Meetup_Times', backref = 'user', passive_deletes=True, lazy='dynamic')
+    device_token = db.Column(db.String(128), default=None)
 
     @property
     def password(self):
@@ -64,6 +65,10 @@ class Board(db.Model):
     todos_ongoing = db.relationship('Todo_Ongoing', backref = 'board', passive_deletes=True)
     todos_done = db.relationship('Todo_Done', backref = 'board')
     memos = db.relationship('Memo', backref = 'board', passive_deletes=True)
+    meetup_status = db.Column(db.SmallInteger, default=0)
+    meetup_location = db.Column(db.Unicode(128), default=None)
+    meetup_time = db.Column(db.DateTime, default=None)
+    meetup_times = db.relationship('Meetup_Times', backref = 'board', passive_deletes=True, lazy='dynamic')
     
 class Todo(db.Model):
     __tablename__ = 'todos'
@@ -107,3 +112,11 @@ class Thanks(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     done_id = db.Column(db.Integer, db.ForeignKey('todos_done.id'))
+
+class Meetup_Times(db.Model):
+    __tablename__ = 'meetup_times'
+    id = db.Column(db.Integer, primary_key = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
+    board_id = db.Column(db.Integer, db.ForeignKey('boards.id', ondelete='CASCADE'))
+    start_time = db.Column(db.DateTime, default=None)
+    end_time = db.Column(db.DateTime, default=None)

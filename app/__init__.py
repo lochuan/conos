@@ -18,8 +18,10 @@ from .views.board import board
 from .views.todo import todo
 from .views.member import member
 from .views.memo import memo
+from .views.meetup import meetup
 app.register_blueprint(user, url_prefix='/user')
 app.register_blueprint(board, url_prefix='/board')
 app.register_blueprint(member, url_prefix='/member')
 app.register_blueprint(todo, url_prefix='/todo')
 app.register_blueprint(memo, url_prefix='/memo')
+app.register_blueprint(meetup, url_prefix='/meetup')

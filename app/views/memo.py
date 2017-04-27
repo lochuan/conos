@@ -1,4 +1,4 @@
-from .. import app, db, auth, jwt_lt
+from .. import app, db, auth
 from ..models import Board, Memo
 from flask import request, jsonify, make_response, g, Blueprint
 from datetime import datetime
