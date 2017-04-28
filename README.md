@@ -10,16 +10,20 @@
 /user/get_confirm_mail/
 /user/forget_password/
 /user/change_password/
-
-/board/
-
-/member/
+/user/change_name/
+/user/device_token/ (For pushing notification to clients)
 
 /todo/
 /toto/move_to_ongoing/
 /todo/move_to_done/
 
-/memo/
+/board/
+
+/member/
+
+/memo
+
+/meetup/
 ```
 
 ### User management
@@ -27,7 +31,7 @@
 #### Register:
 
 ```
-URL: http://166.62.32.120:5000/user/register/
+URL: http://166.62.32.120:5000/user/register/ (**Token free**)
 Method: POST
 POST Format: {"name":"foo", "email":"bar@foo.com", "password":"bar"}
 {
@@ -41,7 +45,7 @@ After registeration, a token would return back, this token is for authorization,
 #### Get Token:
 
 ```
-URL: http://166.62.32.120:5000/user/get_token/
+URL: http://166.62.32.120:5000/user/get_token/ (**Token free**)
 Method: POST
 POST Format: {"email":"bar@foo.com", "password":"foo"}
 Response: {
@@ -55,7 +59,7 @@ You got a token from registeration, if you lost the token somehow, you can get a
 #### Get confirmation mail:
 
 ```
-URL: http://166.62.32.120:5000/user/get_confirm_mail/
+URL: http://166.62.32.120:5000/user/get_confirm_mail/ (**Token free**)
 Method: POST
 POST Format: {"email":"foo@bar.com"}
 Response: {
@@ -68,7 +72,7 @@ The email has been using for reseting password.  The confirmation mail send to u
 #### Forget password:
 
 ```
-URL: http://166.62.32.120:5000/user/forget_password/
+URL: http://166.62.32.120:5000/user/forget_password/ (**Token free**)
 Method: POST
 POST Format: {"email":"bar@foo.com"}
 Response: {
@@ -81,8 +85,8 @@ The client post the user's email to here, then the server will regenerate a rand
 #### Change password:
 
 ```
-URL: http://166.62.32.120:5000/user/change_password/
-Method: POST
+URL: http://166.62.32.120:5000/user/change_password/ (**Token free**)
+Method: POST 
 POST Format: {"email":"some@something.com", "old_password":"12345", "new_password":"45678"}
 Response:{
   "message": "Password has changed successfully",
@@ -90,6 +94,43 @@ Response:{
   "token": "eyJhbGciOiJIUzI1NiIsImlhdCI6MTQ5MzI4Mjg4NiwiZXhwIjoxNDkzODg3Njg2fQ.eyJ1c2VyX25hbWUiOiJMb2NodWFuIiwidXNlcl9lbWFpbCI6InNvbWVAc29tZXRoaW5nLmNvbSIsInVzZXJfaWQiOjF9.yXO_RPFCr7Ab1YBtuu8ZTyu2Ux_JTvtnq6YuF25WMjM"
 }
 ```
+
+#### Change name:
+
+```
+URL: http://166.62.32.120:5000/user/change_name/
+Method: PUT
+POST Format: {"name":"Good Name"}
+Response:{
+  "message": "You have changed your name from (user1) to (Good Name)",
+  "status": "success"
+}
+```
+
+#### Upload device_token
+
+```
+URL: http://166.62.32.120:5000/user/device_token/
+Method:POST
+POST Format: {"device_token":"abc123213lkuiouaewrasdfa"}
+Response:{
+  "message": "You have been added your device_token",
+  "status": "success"
+}
+```
+
+#### Update device_token
+
+```
+URL: http://166.62.32.120:5000/user/device_token/
+Method:PUT
+POST Format: {"device_token":"abadsfadsfadfkuiouaewrasdfa"}
+Response:{
+  "message": "You have been updated your device_token",
+  "status": "success"
+}
+```
+
 
 ### Board
 
@@ -277,6 +318,55 @@ Response:{
   "message": "The (memo1) has been changed",
   "status": "success",
   "token": "eyJpYXQiOjE0OTMyOTExMTUsImV4cCI6MTQ5Mzg5NDQ3NCwiYWxnIjoiSFMyNTYifQ.eyJ1c2VyX25hbWUiOiJsb2NodWFuIiwidXNlcl9lbWFpbCI6InNvbWUxQGdvb2QuY29tIiwidXNlcl9pZCI6bnVsbH0.RHXfL0FJscL2psfuHhZZHgbCBVX0fmrDyih98AtxbxE"
+}
+```
+
+### Meetup
+
+#### Add a meetup to a board
+
+```
+URL:http://166.62.32.120.5000/meetup/
+Method: POST
+POST Format: {"board_id":"1","location":"room-101","start_time":"2017-04-23 09:30:21", "end_time":"2017-04-23 12:00:00"}
+Response:{
+  "message": "Meetup has been added in (컴퓨터과학), wait for others response",
+  "status": "success",
+  "token": "eyJpYXQiOjE0OTMzNTAzMzIsImFsZyI6IkhTMjU2IiwiZXhwIjoxNDkzOTU2OTA4fQ.eyJ1c2VyX2VtYWlsIjoic29tZTFAZ29vZCIsInVzZXJfaWQiOm51bGwsInVzZXJfbmFtZSI6InVzZXIxIn0.B4HSq7ChvY7nSL3XPTdXGqmUep7mRBI-kt_sV8TEO8c"
+}
+```
+Both the start_time and the end_time must be in format of 'yyyy-mm-dd hh:mm:ss'. For production, all of the datetime must be in UTC standard time. Some tips below:
+
+1. If you don't want to decide the location, assign location as null. -> "location":"null"
+2. If the location has been uploaded, but you want to change it. -> "location":"room-100", then location would be changed to room-100.
+3. If the meetup time doesn't match, you must re-update your start_time or end_time, then you can post with {"board_id":"1","location":"null","start_time":"new time", "end_time":"new time"}, in this case, you just want to re-update your time, no want to change the meetup location, so you must be assign location as null.
+4. Still confusing? **One board only have one meetup location, but can have multiple meetup_time response from different users**. For this API, surely I can divide it to add_meetup, add_meetup_location, update_meetup_location, add_meetup_time, update_meetup_time, but it's so tedious and bloated. Finally, I decide to combine all this features together, just in one URL, one API.
+5. What will happen if the server get all user's response?  The server would response:
+```
+Response on fail match:{
+        'status': 'fail',
+        'message': '(user1) was too late, or (user2) was too early' 
+      }
+
+Response on successful match:responseObject = {
+        'status': 'success',
+        'time': "Mon, 10 Apr 2017 09:00:00 GMT",
+        'location': "room-100"
+      }
+```
+6. What else? OK, there is a attribute in every board object called meetup_status, it has three different values, 0 represents no meetup in the board, 1 represents the meetup is undering negotiation, 2 represents the meetup has been decided.
+7. Get your hands dirty, explore more by yourself.
+
+#### Delete meetup within a board
+
+```
+URL:http://166.62.32.120:5000/meetup/
+Method: DELETE
+POST Format: {"board_id":"1"}
+Response:{
+  "message": "Meetup has been removed from (컴퓨터과학)",
+  "status": "success",
+  "token": "eyJpYXQiOjE0OTMzNTAxMzQsImFsZyI6IkhTMjU2IiwiZXhwIjoxNDkzOTU2OTA4fQ.eyJ1c2VyX2VtYWlsIjoic29tZTFAZ29vZCIsInVzZXJfaWQiOm51bGwsInVzZXJfbmFtZSI6InVzZXIxIn0.QKQpLAQZ6nS7fTpWZCluej5--L4tUzSO-NIT5fYzkYY"
 }
 ```
 

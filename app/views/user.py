@@ -145,6 +145,49 @@ def change_password():
             }
             return make_response(jsonify(responseObject)), 400
 
+@user.route('/change_name/', methods=['PUT'])
+@auth.login_required
+def change_name():
+    repa = ('name')
+    if not request.json or not all(para in repa for para in request.json):
+        responseObject = {
+                'status': 'fail',
+                'message': 'You need to give name'
+            }
+        return make_response(jsonify(responseObject)), 400
+   
+    old_name = g.user.name
+    g.user.name = request.json['name']
+    db.session.commit()
+    responseObject = {
+            'status': 'success',
+            'message': 'You have changed your name from (%s) to (%s)' % (old_name, g.user.name)
+        }
+    return make_response(jsonify(responseObject)), 400
+
+@user.route('/device_token/', methods=['POST', 'PUT'])
+@auth.login_required
+def update_device_token():
+    repa = ('device_token')
+    if not request.json or not all(para in repa for para in request.json):
+        responseObject = {
+                'status': 'fail',
+                'message': 'You need to give device_token'
+            }
+        return make_response(jsonify(responseObject)), 400
+
+    if g.user.device_token == None:
+        proper_word = 'added'
+    else:
+        proper_word = 'updated'
+    g.user.device_token = request.json['device_token']
+    db.session.commit()
+    responseObject = {
+            'status': 'success',
+            'message': 'You have been %s your device_token' % proper_word
+        }
+    return make_response(jsonify(responseObject)), 400
+
 @user.route('/get_confirm_mail/', methods=['POST'])
 def send_confirm_mail():
     g.user=None
@@ -233,33 +276,6 @@ def confirm(token):
             return make_response("<h2>Confirmation Info Error</h2>"), 400
     except Exception as e:
         return make_response("<h2>Confimation link is wrong or expired</h2>"), 400
-
-@user.route('/', methods=['PUT'])
-@auth.login_required
-def update_user_profile():
-    repa = ('name','device_token')
-    if not request.json or not all(para in repa for para in request.json):
-        responseObject = {
-                'status': 'fail',
-                'message': 'You need to give name and device_token',
-                'token': g.token
-            }
-        return make_response(jsonify(responseObject)), 400
-    
-    if request.json['name'] == 'null':
-        pass
-    else:
-        g.user.name = request.json['name']
-    if request.json['device_token'] == 'null':
-        pass
-    else:
-        g.user.device_token = request.json['device_token']
-    db.session.commit()
-    responseObject = {
-        'status': ' success',
-        'message': 'user profile has been updated'
-    }
-    return jsonify(responseObject), 200
 
 @user.route('/', methods=['GET'])
 @auth.login_required
@@ -377,6 +393,6 @@ def send_user_profile():
         }
         return jsonify(responseObject), 500 
 
-    return jsonify({"user_id":g.user.id, "user_name":g.user.name, "confirmed":g.user.confirmed, "thanks_received": g.user.thanks_received, "todos_created_num":g.user.todos_created_num, "todos_done_num":g.user.todos_done_num, "boards":board_list, "thanks_to":thanks_to_list, "token":g.token}), 200
+    return jsonify({"user_id":g.user.id, "user_name":g.user.name, "device_token":g.user.device_token, "confirmed":g.user.confirmed, "thanks_received": g.user.thanks_received, "todos_created_num":g.user.todos_created_num, "todos_done_num":g.user.todos_done_num, "boards":board_list, "thanks_to":thanks_to_list, "token":g.token}), 200
 
 

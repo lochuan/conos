@@ -34,86 +34,95 @@ def add_meetup():
 		g.board.meetup_times.append(g.meetup)
 		g.user.meetup_times.append(g.meetup)
 		g.board.meetup_status = 1
-		if g.board.meetup_location == None:
+		if request.json['location'] != 'null':
 			g.board.meetup_location = request.json['location']
 		db.session.commit()
 		responseObject = {
 			'status': 'success',
-			'message': 'Meetup has been added in (%s)' % g.board.name,
+			'message': 'Meetup has been added in (%s), wait for others response' % g.board.name,
 			'token': g.token
 		}
 		return jsonify(responseObject), 200
 
-	if len(g.user.meetup_times.all()) != 0:
-		for mt in g.user.meetup_times:
-			if mt.board.id == g.board.id:
-				if request.json['location'] != 'null':
-					g.board.meetup_location = request.json['location']
-				mt.start_time = datetime.strptime(request.json['start_time'], '%Y-%m-%d %H:%M:%S')
-				mt.end_time = datetime.strptime(request.json['end_time'], '%Y-%m-%d %H:%M:%S')
-				db.session.commit
-				match = check_match()
-				if match:
+	if g.board.meetup_status == 1:
+		if g.user.meetup_times.count() != 0:
+			for mt in g.user.meetup_times:
+				if mt.board.id == g.board.id:
+					if request.json['location'] != 'null':
+						g.board.meetup_location = request.json['location']
+					mt.start_time = datetime.strptime(request.json['start_time'], '%Y-%m-%d %H:%M:%S')
+					mt.end_time = datetime.strptime(request.json['end_time'], '%Y-%m-%d %H:%M:%S')
+					db.session.commit()
+					match = check_match()
+					if match:
+						responseObject = {
+							'status': 'success',
+							'message': 'Your meetup has been updated',
+							'token': g.token,
+							'auto_match': match
+						}
+						return jsonify(responseObject), 200
 					responseObject = {
-						'status': 'success',
-						'message': 'Your meetup has been updated',
-						'token': g.token,
-						'auto_match': match
-					}
+							'status': 'success',
+							'message': 'Your meetup has been updated, wait for others response',
+							'token': g.token
+						}
 					return jsonify(responseObject), 200
-				responseObject = {
-						'status': 'success',
-						'message': 'Your meetup has been updated',
-						'token': g.token,
-					}
-				return jsonify(responseObject), 200
-			else:
-				g.meetup = Meetup_Times(user_id=g.user.id, board_id=g.board.id, start_time=datetime.strptime(request.json['start_time'], '%Y-%m-%d %H:%M:%S'), end_time=datetime.strptime(request.json['end_time'], '%Y-%m-%d %H:%M:%S'))
-				g.board.meetup_times.append(g.meetup)
-				g.user.meetup_times.append(g.meetup)
-				g.board.meetup_status = 1
-				if g.board.meetup_location == None:
-					g.board.meetup_location = request.json['location']
-				db.session.commit()
-				match = check_match()
-				if match:
+				else:
+					g.meetup = Meetup_Times(user_id=g.user.id, board_id=g.board.id, start_time=datetime.strptime(request.json['start_time'], '%Y-%m-%d %H:%M:%S'), end_time=datetime.strptime(request.json['end_time'], '%Y-%m-%d %H:%M:%S'))
+					g.board.meetup_times.append(g.meetup)
+					g.user.meetup_times.append(g.meetup)
+					if request.json['location'] != 'null':
+						g.board.meetup_location = request.json['location']
+					db.session.commit()
+					match = check_match()
+					if match:
+						responseObject = {
+							'status': 'success',
+							'message': 'Your Meetup has been added in (%s)' % g.board.name,
+							'token': g.token,
+							'auto_match': match
+						}
+						return jsonify(responseObject), 200
 					responseObject = {
-						'status': 'success',
-						'message': 'Meetup has been added in (%s)' % g.board.name,
-						'token': g.token,
-						'auto_match': match
-					}
+							'status': 'success',
+							'message': 'Your Meetup has been added in (%s), wait for others response' % g.board.name,
+							'token': g.token,
+							'auto_match': None
+						}
 					return jsonify(responseObject), 200
+		else:
+			g.meetup = Meetup_Times(user_id=g.user.id, board_id=g.board.id, start_time=datetime.strptime(request.json['start_time'], '%Y-%m-%d %H:%M:%S'), end_time=datetime.strptime(request.json['end_time'], '%Y-%m-%d %H:%M:%S'))
+			g.board.meetup_times.append(g.meetup)
+			g.user.meetup_times.append(g.meetup)
+			g.board.meetup_status = 1
+			if request.json['location'] != 'null':
+				g.board.meetup_location = request.json['location']
+			db.session.commit()
+			match = check_match()
+			if match:
 				responseObject = {
-						'status': 'success',
-						'message': 'Meetup has been added in (%s)' % g.board.name,
-						'token': g.token,
-					}
+					'status': 'success',
+					'message': 'Meetup has been added in (%s)' % g.board.name,
+					'token': g.token,
+					'auto_match': match
+				}
 				return jsonify(responseObject), 200
-	else:
-		g.meetup = Meetup_Times(user_id=g.user.id, board_id=g.board.id, start_time=datetime.strptime(request.json['start_time'], '%Y-%m-%d %H:%M:%S'), end_time=datetime.strptime(request.json['end_time'], '%Y-%m-%d %H:%M:%S'))
-		g.board.meetup_times.append(g.meetup)
-		g.user.meetup_times.append(g.meetup)
-		g.board.meetup_status = 1
-		if g.board.meetup_location == None:
-			g.board.meetup_location = request.json['location']
-		db.session.commit()
-		match = check_match()
-		if match:
 			responseObject = {
-				'status': 'success',
-				'message': 'Meetup has been added in (%s)' % g.board.name,
-				'token': g.token,
-				'auto_match': match
-			}
+					'status': 'success',
+					'message': 'Meetup has been added in (%s)' % g.board.name,
+					'token': g.token,
+					'auto_match': None
+				}
 			return jsonify(responseObject), 200
-		responseObject = {
-				'status': 'success',
-				'message': 'Meetup has been added in (%s)' % g.board.name,
-				'token': g.token
-			}
-		return jsonify(responseObject), 200
 
+	if g.board.meetup_status == 2:
+		responseObject = {
+					'status': 'fail',
+					'message': 'Meetup has been decided in (%s)' % g.board.name,
+					'token': g.token
+				}
+		return jsonify(responseObject), 400
 	
 @meetup.route('/', methods=['DELETE'])
 @auth.login_required
@@ -153,17 +162,17 @@ def delete_meetup():
 
 
 def check_match():
-	if len(g.board.users.all()) == len(g.board.meetup_times.all()):
+	if g.board.users.count() == g.board.meetup_times.count() and g.board.meetup_status == 1:
 		user_start_time={}
 		user_end_time={}
 		for meetup_time in g.board.meetup_times:
 			user_start_time[meetup_time.user.name] = time.mktime(meetup_time.start_time.timetuple())
 			user_end_time[meetup_time.user.name] = time.mktime(meetup_time.end_time.timetuple())
 
-		v_start = user_start_time.values()
-		k_start = user_start_time.keys()
-		v_end = user_end_time.values()
-		k_end = user_end_time.keys()
+		v_start = list(user_start_time.values())
+		k_start = list(user_start_time.keys())
+		v_end = list(user_end_time.values())
+		k_end = list(user_end_time.keys())
 
 		if max(v_start) > min(v_end):
 			g.board.meetup_status = 1
@@ -171,7 +180,7 @@ def check_match():
 			db.session.commit()
 			responseObject = {
 				'status': 'fail',
-				'message': 'The start time of (%s) was too late, or the end time of (%s) was too early' % (k_start[v_start.index(max(v_start))], k_end[v_end.index(min(v_end))]),
+				'message': '(%s) was too late, or (%s) was too early' % (k_start[v_start.index(max(v_start))], k_end[v_end.index(min(v_end))]),
 			}
 			return responseObject
 		else:
@@ -180,7 +189,8 @@ def check_match():
 			db.session.commit()
 			responseObject = {
 				'status': 'success',
-				'message': 'Meet location:%s, Meet time: %s' % (g.board.meetup_location, g.board.meetup_time),
+				'time': g.board.meetup_time,
+				'location': g.board.meetup_location
 			}
 			return responseObject
 	else:

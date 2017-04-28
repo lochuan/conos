@@ -10,6 +10,7 @@ config.py
 # Distribution / packaging
 .Python
 env/
+db_repository/
 build/
 develop-eggs/
 dist/
