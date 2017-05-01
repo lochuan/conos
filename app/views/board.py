@@ -22,96 +22,178 @@ def verify_token(token):
         return True
     return False
 
-# @board.route('/', methods=['GET'])  # change this API for web
-# @auth.login_required
-# def send_boards():
-# 	board_list = []
-# 	for board in g.user.boards:
-# 		board_info = {
-# 			'id': board.id,
-# 			'name': board.name,
-# 			'created_time': board.created_time
-# 		}
-# 		board_list.append(board_info)
-# 	return jsonify({"boards": board_list, "token": g.token})
-
 @board.route('/', methods=['POST'])
 @auth.login_required
 def add_board():
-	g.board = None
-	if not request.json or not 'board_name' in request.json:
-		responseObject = {
-				'status': 'fail',
-				'message': 'You need to give board a name',
-				'token': g.token
-			}
-		return make_response(jsonify(responseObject)), 400
-	g.board = Board(name=request.json['board_name'])
-	g.board.users.append(g.user)
-	db.session.commit()
-	responseObject = {
-				'status': 'success',
-				'message': '(%s) has been added' % g.board.name,
-				'token': g.token
-			}
-	return make_response(jsonify(responseObject)), 201
+    g.board = None
+    if not request.json or not 'board_name' in request.json:
+        responseObject = {
+                'status': 'fail',
+                'message': 'You need to give board a name',
+                'token': g.token
+            }
+        return make_response(jsonify(responseObject)), 400
+    g.board = Board(name=request.json['board_name'])
+    g.board.users.append(g.user)
+    db.session.commit()
+    responseObject = {
+                'status': 'success',
+                'message': '(%s) has been added' % g.board.name,
+                'token': g.token
+            }
+    return make_response(jsonify(responseObject)), 201
 
 @board.route('/', methods=['DELETE'])
 @auth.login_required
 def delete_board():
-	g.board = None
-	if not request.json or not 'board_id' in request.json:
-		responseObject = {
-				'status': 'fail',
-				'message': 'You need to give board a name',
-				'token': g.token
-			}
-		return make_response(jsonify(responseObject)), 400
-	g.board = Board.query.filter_by(id=request.json['board_id']).first()
-	if g.board == None:
-		responseObject = {
-				'status': 'fail',
-				'message': 'No such board_id',
-				'token': g.token
-		}
-		return jsonify(responseObject), 400
-	db.session.delete(g.board)
-	db.session.commit()
-	responseObject = {
-				'status': 'success',
-				'message': '(%s) has been deleted' % g.board.name,
-				'token': g.token
-			}
-	return make_response(jsonify(responseObject)), 200
+    g.board = None
+    if not request.json or not 'board_id' in request.json:
+        responseObject = {
+                'status': 'fail',
+                'message': 'You need to give board a name',
+                'token': g.token
+            }
+        return make_response(jsonify(responseObject)), 400
+    g.board = Board.query.filter_by(id=request.json['board_id']).first()
+    if g.board == None:
+        responseObject = {
+                'status': 'fail',
+                'message': 'No such board_id',
+                'token': g.token
+        }
+        return jsonify(responseObject), 400
+    db.session.delete(g.board)
+    db.session.commit()
+    responseObject = {
+                'status': 'success',
+                'message': '(%s) has been deleted' % g.board.name,
+                'token': g.token
+            }
+    return make_response(jsonify(responseObject)), 200
 
 @board.route('/', methods=['PUT'])
 @auth.login_required
 def update_board():
-	g.board = None
-	repa = ('board_id','board_name')
-	if not request.json or not all(para in repa for para in request.json):
-		responseObject = {
-				'status': 'fail',
-				'message': 'You need to give board a name',
-				'token': g.token
-			}
-		return make_response(jsonify(responseObject)), 400
-	try:
-		g.board = Board.query.filter_by(id=request.json['board_id']).first()
-	except Exception as e:
-		responseObject = {
-				'status': 'fail',
-				'message': 'database query error',
-				'error': str(e),
-				'token': g.token
-		}
-		return jsonify(responseObject), 500
-	old_name = g.board.name
-	g.board.name = request.json['board_name']
-	db.session.commit()
-	responseObject = {
-				'status': 'success',
-				'message': 'The board name have changed from (%s) to (%s)' % (old_name, g.board.name),
-				'token': g.token
-			}
-	return make_response(jsonify(responseObject)), 400
+    g.board = None
+    repa = ('board_id','board_name')
+    if not request.json or not all(para in repa for para in request.json):
+        responseObject = {
+                'status': 'fail',
+                'message': 'You need to give board a name',
+                'token': g.token
+            }
+        return make_response(jsonify(responseObject)), 400
+    try:
+        g.board = Board.query.filter_by(id=request.json['board_id']).first()
+    except Exception as e:
+        responseObject = {
+                'status': 'fail',
+                'message': 'database query error',
+                'error': str(e),
+                'token': g.token
+        }
+        return jsonify(responseObject), 500
+    old_name = g.board.name
+    g.board.name = request.json['board_name']
+    db.session.commit()
+    responseObject = {
+                'status': 'success',
+                'message': 'The board name have changed from (%s) to (%s)' % (old_name, g.board.name),
+                'token': g.token
+            }
+    return make_response(jsonify(responseObject)), 400
+
+@board.route('/<board_id>/', methods=['GET'])
+def get_board_info(board_id):
+    g.board = None
+    g.board = Board.query.filter_by(id=board_id).first()
+    if g.board == None:
+        responseObject = {
+                'status': 'fail',
+                'message': 'No such board_id',
+                'token': g.token
+        }
+        return jsonify(responseObject), 400
+
+    todo_list = []
+    todo_ongoing_list = []
+    todo_done_list = []
+    member_list = []
+    memo_list = []
+    meetup_list = []
+
+    for todo in g.board.todos:
+        todo_info = {
+            'todo_id':todo.id,
+            'todo_item': todo.item,
+            'todo_last_changed_time': todo.last_changed_time,
+            'creator': todo.user.name
+        }
+        todo_list.append(todo_info)
+    for todo_ongoing in g.board.todos_ongoing:
+        todo_ongoing_info = {
+            'todo_ongoing_id': todo_ongoing.id,
+            'todo_ongoing_item': todo_ongoing.item,
+            'holder': todo_ongoing.user.name,
+            'holder_id': todo_ongoing.user.id
+        }
+        todo_ongoing_list.append(todo_ongoing_info)
+    for todo_done in g.board.todos_done:
+        thanks_from_list = []
+        for thanks_from in todo_done.thanks_from:
+            thanks_from_info = {
+                'user_id': thanks_from.user.id,
+                'user_name': thanks_from.user.name
+            }
+            thanks_from_list.append(thanks_from_info)
+        todo_done_info = {
+            'todo_done_id': todo_done.id,
+            'todo_done_item': todo_done.item,
+            'done_by': todo_done.user.name,
+            'thanks_from': thanks_from_list
+        }
+        todo_done_list.append(todo_done_info)
+    for member in g.board.users:
+        member_info = {
+            'member_id': member.id,
+            'member_name': member.name,
+            'member_thanks_received': member.thanks_received,
+            'member_todos_created_num': member.todos_created_num,
+            'member_todos_done_num': member.todos_done_num
+        }
+        member_list.append(member_info)
+    for memo in g.board.memos:
+        memo_info = {
+            'memo_id': memo.id,
+            'memo_title': memo.title,
+            'memo_content': memo.content,
+            'memo_last_changed_time': memo.last_changed_time,
+            'holder_id': memo.user.id,
+            'holder_name': memo.user.name
+        }
+        memo_list.append(memo_info)
+    for meetup in g.board.meetup_times:
+        meetup_info = {
+            'user': meetup.user.name,
+            'user_id': meetup.user.id,
+            'start_time': meetup.start_time,
+            'end_time': meetup.end_time
+        }
+        meetup_list.append(meetup_info)
+
+    board_info = {
+                'board_id': g.board.id,
+                'board_name': g.board.name,
+                'todos': todo_list,
+                'todos_ongoing': todo_ongoing_list,
+                'todos_done': todo_done_list,
+                'members': member_list,
+                'memos': memo_list,
+                'meetup_status': g.board.meetup_status,
+                'meetup_location': g.board.meetup_location,
+                'meetup_time': g.board.meetup_time,
+                'meetup_user_responses': meetup_list
+        }
+
+    return jsonify(board_info), 200
+
