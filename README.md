@@ -26,12 +26,255 @@
 /meetup/
 ```
 
+### Get all the information for a user **For App**
+
+```
+URL:http://166.62.32.120:5000/user/
+Method: GET
+Response:{
+  "boards": [
+    {
+      "board_id": 1,
+      "board_name": "컴퓨터과학",
+      "meetup_location": "room-101",
+      "meetup_status": 1,
+      "meetup_time": null,
+      "meetup_user_responses": [
+        {
+          "end_time": "Sun, 23 Apr 2017 12:00:00 GMT",
+          "start_time": "Sun, 23 Apr 2017 09:30:21 GMT",
+          "user": "Good Name",
+          "user_id": 1
+        }
+      ],
+      "members": [
+        {
+          "member_id": 1,
+          "member_name": "Good Name",
+          "member_thanks_received": 0,
+          "member_todos_created_num": 5,
+          "member_todos_done_num": 1
+        },
+        {
+          "member_id": 2,
+          "member_name": "user2",
+          "member_thanks_received": 0,
+          "member_todos_created_num": 0,
+          "member_todos_done_num": 0
+        },
+        {
+          "member_id": 3,
+          "member_name": "user3",
+          "member_thanks_received": 0,
+          "member_todos_created_num": 0,
+          "member_todos_done_num": 0
+        }
+      ],
+      "memos": [
+        {
+          "holder_id": 1,
+          "holder_name": "Good Name",
+          "memo_content": "各种类似桌面软件的Web应用大量涌现，网站的前端由此发生了翻天覆地的变化。网页不再只是承载单一的文字和图片，各种富媒体让网页的内容更加生动，网页上软件化的交互形式为用户提供了更好的使用体验，这些都是基于前端技术实现的。以前会Photoshop和Dreamweaver就可以制作网页，现在只掌握这些已经远远不够了。无论是开发难度上，还是开发方式上，现在的网页制作都更接近传统的网站后台开发，所以现在不再叫网页制作，而是叫Web前端开发。Web前端开发在产品开发环节中的作用变得越来越重要，而且需要专业的前端工程师才能做好，这方面的专业人才近几年来备受青睐。Web前端开发是一项很特殊的工作，涵盖的知识面非常广，既有具体的技术，又有抽象的理念。简单地说，它的主要职能就是把网站的界面更好地呈现给用户。",
+          "memo_id": 1,
+          "memo_last_changed_time": "Mon, 01 May 2017 07:06:01 GMT",
+          "memo_title": "前端开发注意"
+        },
+        {
+          "holder_id": 1,
+          "holder_name": "Good Name",
+          "memo_content": "前端架构师跟其相比肯定有更高的职责要求，那么前端架构师的职责是什么呢？前端架构师更多意义上说像是 一个管理的岗位，但是其职责要求却不仅只是管理。前端架构师需要带领组员实现全网的前端框架和优化，还要创建前端的相应标准和规范，并通过孜孜不倦的布道 来完善并推广和应用自己的标准和框架。同时，还要站在全局的角色为整个网站的信息架构和技术选型提供专业意见和方案。",
+          "memo_id": 2,
+          "memo_last_changed_time": "Mon, 01 May 2017 07:06:36 GMT",
+          "memo_title": "后端开发注意"
+        }
+      ],
+      "todos": [
+        {
+          "creator": "Good Name",
+          "todo_id": 1,
+          "todo_item": "前端开发",
+          "todo_last_changed_time": "Mon, 01 May 2017 07:01:42 GMT"
+        },
+        {
+          "creator": "Good Name",
+          "todo_id": 2,
+          "todo_item": "数据库设计",
+          "todo_last_changed_time": "Mon, 01 May 2017 07:01:53 GMT"
+        },
+        {
+          "creator": "Good Name",
+          "todo_id": 3,
+          "todo_item": "服务器开发",
+          "todo_last_changed_time": "Mon, 01 May 2017 07:02:05 GMT"
+        }
+      ],
+      "todos_done": [
+        {
+          "done_by": "Good Name",
+          "thanks_from": [],
+          "todo_done_id": 1,
+          "todo_done_item": "UI设计"
+        }
+      ],
+      "todos_ongoing": [
+        {
+          "holder": "Good Name",
+          "holder_id": 1,
+          "todo_ongoing_id": 2,
+          "todo_ongoing_item": "交互逻辑"
+        }
+      ]
+    },
+    {
+      "board_id": 2,
+      "board_name": "测试用board",
+      "meetup_location": null,
+      "meetup_status": 0,
+      "meetup_time": null,
+      "meetup_user_responses": [],
+      "members": [
+        {
+          "member_id": 1,
+          "member_name": "Good Name",
+          "member_thanks_received": 0,
+          "member_todos_created_num": 5,
+          "member_todos_done_num": 1
+        }
+      ],
+      "memos": [],
+      "todos": [],
+      "todos_done": [],
+      "todos_ongoing": []
+    }
+  ],
+  "confirmed": 0,
+  "device_token": "abadsfadsfadfkuiouaewrasdfa",
+  "thanks_received": 0,
+  "thanks_to": [],
+  "todos_created_num": 5,
+  "todos_done_num": 1,
+  "token": "eyJpYXQiOjE0OTM2MjI4MDcsImFsZyI6IkhTMjU2IiwiZXhwIjoxNDk0MjMxMTg4fQ.eyJ1c2VyX25hbWUiOiJHb29kIE5hbWUiLCJ1c2VyX2VtYWlsIjoic29tZTFAZ29vZCIsInVzZXJfaWQiOjF9.LUxT5e8R0mNTb-Mh7bfRDxvpT1UmxbjVJqc_8RuKQ8o",
+  "user_id": 1,
+  "user_name": "Good Name"
+}
+```
+This API offers all of the information related to a user. The boards which the user involved, and all of the information within the board, like todo, todo_ongoing, todo_done, memos, members. Here is a pure-new user's information looks like:
+```
+{
+  "boards": [],
+  "confirmed": 0,
+  "thanks_received": 0,
+  "thanks_to": [],
+  "todos_created_num": 0,
+  "todos_done_num": 0,
+  "token": "eyJpYXQiOjE0OTMyOTE5MjQsImV4cCI6MTQ5MzkwMDMwNywiYWxnIjoiSFMyNTYifQ.eyJ1c2VyX25hbWUiOiJuZXciLCJ1c2VyX2VtYWlsIjoic29tZTJAZ29vZC5jb20iLCJ1c2VyX2lkIjpudWxsfQ.yojrmWD1xGhbhyi1m2lBg0QkNTHvot5fqoqd5C-4e2E",
+  "user_id": 3,
+  "user_name": "new"
+}
+```
+### Get all the information for a board **Token Free**  **For Web**
+URL:http://166.62.32.120:5000/board/<board_id>/
+Method: GET
+Response:{
+  "board_id": 1,
+  "board_name": "컴퓨터과학",
+  "meetup_location": "room-101",
+  "meetup_status": 1,
+  "meetup_time": null,
+  "meetup_user_responses": [
+    {
+      "end_time": "Sun, 23 Apr 2017 12:00:00 GMT",
+      "start_time": "Sun, 23 Apr 2017 09:30:21 GMT",
+      "user": "Good Name",
+      "user_id": 1
+    }
+  ],
+  "members": [
+    {
+      "member_id": 1,
+      "member_name": "Good Name",
+      "member_thanks_received": 0,
+      "member_todos_created_num": 5,
+      "member_todos_done_num": 1
+    },
+    {
+      "member_id": 2,
+      "member_name": "user2",
+      "member_thanks_received": 0,
+      "member_todos_created_num": 0,
+      "member_todos_done_num": 0
+    },
+    {
+      "member_id": 3,
+      "member_name": "user3",
+      "member_thanks_received": 0,
+      "member_todos_created_num": 0,
+      "member_todos_done_num": 0
+    }
+  ],
+  "memos": [
+    {
+      "holder_id": 1,
+      "holder_name": "Good Name",
+      "memo_content": "各种类似桌面软件的Web应用大量涌现，网站的前端由此发生了翻天覆地的变化。网页不再只是承载单一的文字和图片，各种富媒体让网页的内容更加生动，网页上软件化的交互形式为用户提供了更好的使用体验，这些都是基于前端技术实现的。以前会Photoshop和Dreamweaver就可以制作网页，现在只掌握这些已经远远不够了。无论是开发难度上，还是开发方式上，现在的网页制作都更接近传统的网站后台开发，所以现在不再叫网页制作，而是叫Web前端开发。Web前端开发在产品开发环节中的作用变得越来越重要，而且需要专业的前端工程师才能做好，这方面的专业人才近几年来备受青睐。Web前端开发是一项很特殊的工作，涵盖的知识面非常广，既有具体的技术，又有抽象的理念。简单地说，它的主要职能就是把网站的界面更好地呈现给用户。",
+      "memo_id": 1,
+      "memo_last_changed_time": "Mon, 01 May 2017 07:06:01 GMT",
+      "memo_title": "前端开发注意"
+    },
+    {
+      "holder_id": 1,
+      "holder_name": "Good Name",
+      "memo_content": "前端架构师跟其相比肯定有更高的职责要求，那么前端架构师的职责是什么呢？前端架构师更多意义上说像是 一个管理的岗位，但是其职责要求却不仅只是管理。前端架构师需要带领组员实现全网的前端框架和优化，还要创建前端的相应标准和规范，并通过孜孜不倦的布道 来完善并推广和应用自己的标准和框架。同时，还要站在全局的角色为整个网站的信息架构和技术选型提供专业意见和方案。",
+      "memo_id": 2,
+      "memo_last_changed_time": "Mon, 01 May 2017 07:06:36 GMT",
+      "memo_title": "后端开发注意"
+    }
+  ],
+  "todos": [
+    {
+      "creator": "Good Name",
+      "todo_id": 1,
+      "todo_item": "前端开发",
+      "todo_last_changed_time": "Mon, 01 May 2017 07:01:42 GMT"
+    },
+    {
+      "creator": "Good Name",
+      "todo_id": 2,
+      "todo_item": "数据库设计",
+      "todo_last_changed_time": "Mon, 01 May 2017 07:01:53 GMT"
+    },
+    {
+      "creator": "Good Name",
+      "todo_id": 3,
+      "todo_item": "服务器开发",
+      "todo_last_changed_time": "Mon, 01 May 2017 07:02:05 GMT"
+    }
+  ],
+  "todos_done": [
+    {
+      "done_by": "Good Name",
+      "thanks_from": [],
+      "todo_done_id": 1,
+      "todo_done_item": "UI设计"
+    }
+  ],
+  "todos_ongoing": [
+    {
+      "holder": "Good Name",
+      "holder_id": 1,
+      "todo_ongoing_id": 2,
+      "todo_ongoing_item": "交互逻辑"
+    }
+  ]
+}
+```
+
 ### User management
 
 #### Register:
 
 ```
-URL: http://166.62.32.120:5000/user/register/ (**Token free**)
+URL: http://166.62.32.120:5000/user/register/ **Token Free**
 Method: POST
 POST Format: {"name":"foo", "email":"bar@foo.com", "password":"bar"}
 {
@@ -45,7 +288,7 @@ After registeration, a token would return back, this token is for authorization,
 #### Get Token:
 
 ```
-URL: http://166.62.32.120:5000/user/get_token/ (**Token free**)
+URL: http://166.62.32.120:5000/user/get_token/ **Token Free**
 Method: POST
 POST Format: {"email":"bar@foo.com", "password":"foo"}
 Response: {
@@ -59,7 +302,7 @@ You got a token from registeration, if you lost the token somehow, you can get a
 #### Get confirmation mail:
 
 ```
-URL: http://166.62.32.120:5000/user/get_confirm_mail/ (**Token free**)
+URL: http://166.62.32.120:5000/user/get_confirm_mail/ **Token Free**
 Method: POST
 POST Format: {"email":"foo@bar.com"}
 Response: {
@@ -72,7 +315,7 @@ The email has been using for reseting password.  The confirmation mail send to u
 #### Forget password:
 
 ```
-URL: http://166.62.32.120:5000/user/forget_password/ (**Token free**)
+URL: http://166.62.32.120:5000/user/forget_password/ **Token Free**
 Method: POST
 POST Format: {"email":"bar@foo.com"}
 Response: {
@@ -85,7 +328,7 @@ The client post the user's email to here, then the server will regenerate a rand
 #### Change password:
 
 ```
-URL: http://166.62.32.120:5000/user/change_password/ (**Token free**)
+URL: http://166.62.32.120:5000/user/change_password/ **Token Free**
 Method: POST 
 POST Format: {"email":"some@something.com", "old_password":"12345", "new_password":"45678"}
 Response:{
@@ -354,7 +597,7 @@ Response on successful match:responseObject = {
         'location': "room-100"
       }
 ```
-6. What else? OK, there is a attribute in every board object called meetup_status, it has three different values, 0 represents no meetup in the board, 1 represents the meetup is undering negotiation, 2 represents the meetup has been decided.
+6. What else? OK, there is a attribute in every board object called meetup_status, it has three different values, **0 represents no meetup in the board, 1 represents the meetup is undering negotiation, 2 represents the meetup has been decided.**
 7. Get your hands dirty, explore more by yourself.
 
 #### Delete meetup within a board
@@ -367,143 +610,6 @@ Response:{
   "message": "Meetup has been removed from (컴퓨터과학)",
   "status": "success",
   "token": "eyJpYXQiOjE0OTMzNTAxMzQsImFsZyI6IkhTMjU2IiwiZXhwIjoxNDkzOTU2OTA4fQ.eyJ1c2VyX2VtYWlsIjoic29tZTFAZ29vZCIsInVzZXJfaWQiOm51bGwsInVzZXJfbmFtZSI6InVzZXIxIn0.QKQpLAQZ6nS7fTpWZCluej5--L4tUzSO-NIT5fYzkYY"
-}
-```
-
-### Get all the information for a user
-
-```
-URL:http://166.62.32.120:5000/user/
-Method: GET
-Response:{
-  "boards": [
-    {
-      "board_id": 1,
-      "board_name": "board1",
-      "members": [
-        {
-          "member_id": 2,
-          "member_name": "lochuan",
-          "member_thanks_received": 2,
-          "member_todos_created_num": 8,
-          "member_todos_done_num": 3
-        }
-      ],
-      "memos": [
-        {
-          "holder_id": 2,
-          "holder_name": "lochuan",
-          "memo_content": "new content",
-          "memo_id": 1,
-          "memo_last_changed_time": "Thu, 27 Apr 2017 11:05:16 GMT",
-          "memo_title": "new title"
-        }
-      ],
-      "todos": [
-        {
-          "creator": "lochuan",
-          "todo_id": 3,
-          "todo_item": "Task3",
-          "todo_last_changed_time": "Thu, 27 Apr 2017 10:12:09 GMT"
-        },
-        {
-          "creator": "lochuan",
-          "todo_id": 8,
-          "todo_item": "This is task 6",
-          "todo_last_changed_time": "Thu, 27 Apr 2017 11:11:53 GMT"
-        }
-      ],
-      "todos_done": [
-        {
-          "done_by": "lochuan",
-          "thanks_from": [],
-          "todo_done_id": 2,
-          "todo_done_item": "New todo item"
-        }
-      ],
-      "todos_ongoing": [
-        {
-          "holder": "lochuan",
-          "holder_id": 2,
-          "todo_ongoing_id": 4,
-          "todo_ongoing_item": "This is task 4"
-        }
-      ]
-    },
-    {
-      "board_id": 2,
-      "board_name": "board2",
-      "members": [
-        {
-          "member_id": 2,
-          "member_name": "lochuan",
-          "member_thanks_received": 2,
-          "member_todos_created_num": 8,
-          "member_todos_done_num": 3
-        }
-      ],
-      "memos": [],
-      "todos": [
-        {
-          "creator": "lochuan",
-          "todo_id": 6,
-          "todo_item": "Task5",
-          "todo_last_changed_time": "Thu, 27 Apr 2017 10:13:20 GMT"
-        }
-      ],
-      "todos_done": [
-        {
-          "done_by": "lochuan",
-          "thanks_from": [
-            {
-              "user_id": 1,
-              "user_name": "이창섭"
-            },
-            {
-              "user_id": 2,
-              "user_name": "lochuan"
-            }
-          ],
-          "todo_done_id": 1,
-          "todo_done_item": "Task4"
-        },
-        {
-          "done_by": "lochuan",
-          "thanks_from": [],
-          "todo_done_id": 3,
-          "todo_done_item": "Task3"
-        }
-      ],
-      "todos_ongoing": []
-    }
-  ],
-  "confirmed": 0,
-  "thanks_received": 2,
-  "thanks_to": [
-    {
-      "item": "Task4",
-      "user": "lochuan"
-    }
-  ],
-  "todos_created_num": 8,
-  "todos_done_num": 3,
-  "token": "eyJpYXQiOjE0OTMyOTE1NzUsImV4cCI6MTQ5Mzg5NDQ3NCwiYWxnIjoiSFMyNTYifQ.eyJ1c2VyX25hbWUiOiJsb2NodWFuIiwidXNlcl9lbWFpbCI6InNvbWUxQGdvb2QuY29tIiwidXNlcl9pZCI6bnVsbH0.lYolEjDun6ahP0NWJE10GnYdnfWzbWcYFzAnGZPcNfA",
-  "user_id": 2,
-  "user_name": "lochuan"
-}
-```
-This API offers all of the information related to a user. The boards which the user involved, and all of the information within the board, like todo, todo_ongoing, todo_done, memos, members. Here is a pure-new user's information looks like:
-```
-{
-  "boards": [],
-  "confirmed": 0,
-  "thanks_received": 0,
-  "thanks_to": [],
-  "todos_created_num": 0,
-  "todos_done_num": 0,
-  "token": "eyJpYXQiOjE0OTMyOTE5MjQsImV4cCI6MTQ5MzkwMDMwNywiYWxnIjoiSFMyNTYifQ.eyJ1c2VyX25hbWUiOiJuZXciLCJ1c2VyX2VtYWlsIjoic29tZTJAZ29vZC5jb20iLCJ1c2VyX2lkIjpudWxsfQ.yojrmWD1xGhbhyi1m2lBg0QkNTHvot5fqoqd5C-4e2E",
-  "user_id": 3,
-  "user_name": "new"
 }
 ```
 
