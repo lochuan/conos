@@ -26,7 +26,7 @@
 /meetup/
 ```
 
-### Get all the information for a user **For App**
+### Get all the information for a user (For App)
 
 ```
 URL:http://166.62.32.120:5000/user/
@@ -172,7 +172,9 @@ This API offers all of the information related to a user. The boards which the u
   "user_name": "new"
 }
 ```
-### Get all the information for a board **Token Free**  **For Web**
+### Get all the information for a board (For Web)
+
+```
 URL:http://166.62.32.120:5000/board/<board_id>/
 Method: GET
 Response:{
