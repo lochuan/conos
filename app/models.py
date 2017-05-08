@@ -20,7 +20,7 @@ class User(db.Model):
     memos_created_num = db.Column(db.Integer, default=0)
     boards = db.relationship('Board', secondary=users_boards, backref=db.backref('users', lazy='dynamic')) # Also create "users" in Board
     todos = db.relationship('Todo', backref='user')
-    todos_ongoing = db.relationship('Todo_Ongoing', backref='user')
+    todos_ongoing = db.relationship('Todo_Ongoing', backref='user', lazy='dynamic')
     todos_done = db.relationship('Todo_Done', backref='user')
     memos = db.relationship('Memo', backref='user')
     thanks_to = db.relationship('Thanks', backref='user')

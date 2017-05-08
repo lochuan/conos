@@ -158,6 +158,7 @@ def get_board_info(board_id):
             'member_id': member.id,
             'member_name': member.name,
             'member_thanks_received': member.thanks_received,
+            'member_todos_ongoing_num:': member.todos_ongoing.count(),
             'member_todos_created_num': member.todos_created_num,
             'member_todos_done_num': member.todos_done_num
         }
@@ -194,6 +195,5 @@ def get_board_info(board_id):
                 'meetup_time': g.board.meetup_time,
                 'meetup_user_responses': meetup_list
         }
-
     return jsonify(board_info), 200
 
