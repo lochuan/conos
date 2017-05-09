@@ -21,7 +21,9 @@
 
 /member/
 
-/memo
+/memo/
+
+/upload/
 
 /meetup/
 ```
@@ -612,6 +614,48 @@ Response:{
   "message": "Meetup has been removed from (컴퓨터과학)",
   "status": "success",
   "token": "eyJpYXQiOjE0OTMzNTAxMzQsImFsZyI6IkhTMjU2IiwiZXhwIjoxNDkzOTU2OTA4fQ.eyJ1c2VyX2VtYWlsIjoic29tZTFAZ29vZCIsInVzZXJfaWQiOm51bGwsInVzZXJfbmFtZSI6InVzZXIxIn0.QKQpLAQZ6nS7fTpWZCluej5--L4tUzSO-NIT5fYzkYY"
+}
+```
+
+### File Upload and Delete
+
+#### Get signature for uploading file to file storage server
+
+```
+URL:http://166.62.32.120:5000/upload/
+Method: GET
+Response:{
+  "status": "success",
+  "token": "eyJpYXQiOjE0OTQzNDIwMjcsImFsZyI6IkhTMjU2IiwiZXhwIjoxNDk0OTQ5MDgxfQ.eyJ1c2VyX2VtYWlsIjoic29tZTFAZ29vZCIsInVzZXJfbmFtZSI6InVzZXIxIiwidXNlcl9pZCI6MX0.tVAyp11d5QHy7OOa5MXdKXmebhiz8yNj3u_mGT712W0",
+  "upload_auth": "jHd+HQQVnW0oMRoaDGwoeJwyGiphPTEyNTM2OTQxMjEmYj1jb25vcyZrPUFLSURQaUtzTmtaWDJXczIwbUVrdHp6b1N4alJ4UEw1NXo5OCZlPTE0OTQzNDIwODcmdD0xNDk0MzQyMDI3JnI9MjIwODk1MDg2MiZmPQ=="
+}
+```
+
+#### Upload file metadata to our API server
+
+Metadata means the file name, file path, access_url. file path is the only identifier that we can tracking a file in file storage server, access url is the location that we can download the file from file storage server, file name is the name in a board.
+```
+URL:http://166.62.32.120:5000/upload/
+Method: POST
+POST Format: {"board_id":"1", "file_path":"/some@naver.com_123433234", "file_name_in_board":"soft.docx", "access_url":"http://getmyfile/soft.docx"}
+Response:{
+  "message": "(/some@naver.com_123433234) has been uploaded to (board1)",
+  "status": "success",
+  "token": "eyJpYXQiOjE0OTQzNDE3NDQsImFsZyI6IkhTMjU2IiwiZXhwIjoxNDk0OTQ5MDgxfQ.eyJ1c2VyX2VtYWlsIjoic29tZTFAZ29vZCIsInVzZXJfbmFtZSI6InVzZXIxIiwidXNlcl9pZCI6MX0.f4cQ6wdnj20Z5lrls8IIGTnU-M_Oqwm-T3ILTYZ1ygY"
+}
+```
+
+#### Delete a file
+
+```
+URL:http://166.62.32.120:5000/upload/
+Method: DELETE
+POST Format: {"board_id":"1", "file_path":"/some@naver.com_123433234"}
+Response:{
+  "delete_auth": "EaPOo300XtiK190JYoQC4coYHWRhPTEyNTM2OTQxMjEmYj1jb25vcyZrPUFLSURQaUtzTmtaWDJXczIwbUVrdHp6b1N4alJ4UEw1NXo5OCZlPTAmdD0xNDk0MzQyNTAwJnI9Njg1MDQ2MDQ4OSZmPS9zb21lQG5hdmVyLmNvbV8xMjM0MzMyMzQ=",
+  "message": "(/some@naver.com_123433234) has been deleted in API server",
+  "status": "success",
+  "token": "eyJleHAiOjE0OTQ5NDkwODEsImlhdCI6MTQ5NDM0MjUwMCwiYWxnIjoiSFMyNTYifQ.eyJ1c2VyX2lkIjoxLCJ1c2VyX2VtYWlsIjoic29tZTFAZ29vZCIsInVzZXJfbmFtZSI6InVzZXIxIn0.q6zi8_Pcnnl2E0mon6eRxItBm9_A0H8o1zZ_7piCkAc"
 }
 ```
 

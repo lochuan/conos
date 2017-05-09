@@ -356,7 +356,8 @@ def send_user_profile():
             for upload in board.uploads:
                 file_info = {
                     'file_name':upload.file_name_in_board,
-                    'access_url': upload.access_url
+                    'access_url': upload.access_url,
+                    'file_path': upload.file_path
                 }
                 if file_info in file_list:
                     continue

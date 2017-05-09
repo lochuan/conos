@@ -177,7 +177,8 @@ def get_board_info(board_id):
     for upload in g.board.uploads:
         file_info = {
             'file_name':upload.file_name_in_board,
-            'access_url': upload.access_url
+            'access_url': upload.access_url,
+            'file_path': upload.file_path
         }
         file_list.append(file_info)
     for meetup in g.board.meetup_times:
