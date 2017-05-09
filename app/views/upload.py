@@ -77,6 +77,6 @@ def delete_file():
 				'status': 'success',
 				'message': '(%s) has been deleted in API server' % (g.upload.file_path),
 				'token': g.token,
-				'delete_auto': cos_single_signature(request.json['file_path'])
+				'delete_auth': cos_single_signature(request.json['file_path'])
 			}
 	return make_response(jsonify(responseObject)), 200

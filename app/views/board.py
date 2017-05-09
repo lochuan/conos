@@ -121,6 +121,7 @@ def get_board_info(board_id):
     member_list = []
     memo_list = []
     meetup_list = []
+    file_list = []
 
     for todo in g.board.todos:
         todo_info = {
@@ -173,6 +174,12 @@ def get_board_info(board_id):
             'holder_name': memo.user.name
         }
         memo_list.append(memo_info)
+    for upload in g.board.uploads:
+        file_info = {
+            'file_name':upload.file_name_in_board,
+            'access_url': upload.access_url
+        }
+        file_list.append(file_info)
     for meetup in g.board.meetup_times:
         meetup_info = {
             'user': meetup.user.name,
@@ -190,6 +197,7 @@ def get_board_info(board_id):
                 'todos_done': todo_done_list,
                 'members': member_list,
                 'memos': memo_list,
+                'files': file_list,
                 'meetup_status': g.board.meetup_status,
                 'meetup_location': g.board.meetup_location,
                 'meetup_time': g.board.meetup_time,

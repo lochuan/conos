@@ -290,6 +290,7 @@ def send_user_profile():
             member_list = []
             memo_list = []
             meetup_list = []
+            file_list = []
             for todo in board.todos:
                 todo_info = {
                     'todo_id':todo.id,
@@ -352,6 +353,14 @@ def send_user_profile():
                 if memo_info in memo_list:
                     continue
                 memo_list.append(memo_info)
+            for upload in board.uploads:
+                file_info = {
+                    'file_name':upload.file_name_in_board,
+                    'access_url': upload.access_url
+                }
+                if file_info in file_list:
+                    continue
+                file_list.append(file_info)
             for meetup in board.meetup_times:
                 meetup_info = {
                     'user': meetup.user.name,
@@ -370,6 +379,7 @@ def send_user_profile():
                 'todos_done': todo_done_list,
                 'members': member_list,
                 'memos': memo_list,
+                'files': file_list,
                 'meetup_status': board.meetup_status,
                 'meetup_location': board.meetup_location,
                 'meetup_time': board.meetup_time,
