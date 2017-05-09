@@ -65,6 +65,7 @@ class Board(db.Model):
     todos_ongoing = db.relationship('Todo_Ongoing', backref = 'board', passive_deletes=True)
     todos_done = db.relationship('Todo_Done', backref = 'board')
     memos = db.relationship('Memo', backref = 'board', passive_deletes=True)
+    uploads = db.relationship('Upload', backref = 'board', lazy = 'dynamic', passive_deletes=True)
     meetup_status = db.Column(db.SmallInteger, default=0)
     meetup_location = db.Column(db.Unicode(128), default=None)
     meetup_time = db.Column(db.DateTime, default=None)
@@ -120,3 +121,11 @@ class Meetup_Times(db.Model):
     board_id = db.Column(db.Integer, db.ForeignKey('boards.id', ondelete='CASCADE'))
     start_time = db.Column(db.DateTime, default=None)
     end_time = db.Column(db.DateTime, default=None)
+
+class Upload(db.Model):
+    __tablename__ = 'uploads'
+    id = db.Column(db.Integer, primary_key = True)
+    file_path = db.Column(db.Unicode(128))
+    file_name_in_board = db.Column(db.Unicode(128))
+    access_url = db.Column(db.String(128), nullable = False)
+    board_id = db.Column(db.Integer, db.ForeignKey('boards.id', ondelete='CASCADE'))
