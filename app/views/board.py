@@ -204,5 +204,7 @@ def get_board_info(board_id):
                 'meetup_time': g.board.meetup_time,
                 'meetup_user_responses': meetup_list
         }
-    return jsonify(board_info), 200
+    resp = make_response(jsonify(board_info))
+    resp.headers['access-control-allow-origin'] = '*'
+    return resp
 
