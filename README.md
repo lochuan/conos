@@ -31,7 +31,7 @@
 ### Get all the information for a user (For App)
 
 ```
-URL:http://166.62.32.120:5000/user/
+URL:http://172.104.89.56:5000/user/
 Method: GET
 Response:{
   "boards": [
@@ -177,7 +177,7 @@ This API offers all of the information related to a user. The boards which the u
 ### Get all the information for a board (For Web)
 
 ```
-URL:http://166.62.32.120:5000/board/<board_id>/
+URL:http://172.104.89.56:5000/board/<board_id>/
 Method: GET
 Response:{
   "board_id": 1,
@@ -278,7 +278,7 @@ Response:{
 #### Register:
 
 ```
-URL: http://166.62.32.120:5000/user/register/ **Token Free**
+URL: http://172.104.89.56:5000/user/register/ **Token Free**
 Method: POST
 POST Format: {"name":"foo", "email":"bar@foo.com", "password":"bar"}
 {
@@ -292,7 +292,7 @@ After registeration, a token would return back, this token is for authorization,
 #### Get Token:
 
 ```
-URL: http://166.62.32.120:5000/user/get_token/ **Token Free**
+URL: http://172.104.89.56:5000/user/get_token/ **Token Free**
 Method: POST
 POST Format: {"email":"bar@foo.com", "password":"foo"}
 Response: {
@@ -306,7 +306,7 @@ You got a token from registeration, if you lost the token somehow, you can get a
 #### Get confirmation mail:
 
 ```
-URL: http://166.62.32.120:5000/user/get_confirm_mail/ **Token Free**
+URL: http://172.104.89.56:5000/user/get_confirm_mail/ **Token Free**
 Method: POST
 POST Format: {"email":"foo@bar.com"}
 Response: {
@@ -319,7 +319,7 @@ The email has been using for reseting password.  The confirmation mail send to u
 #### Forget password:
 
 ```
-URL: http://166.62.32.120:5000/user/forget_password/ **Token Free**
+URL: http://172.104.89.56:5000/user/forget_password/ **Token Free**
 Method: POST
 POST Format: {"email":"bar@foo.com"}
 Response: {
@@ -332,7 +332,7 @@ The client post the user's email to here, then the server will regenerate a rand
 #### Change password:
 
 ```
-URL: http://166.62.32.120:5000/user/change_password/ **Token Free**
+URL: http://172.104.89.56:5000/user/change_password/ **Token Free**
 Method: POST 
 POST Format: {"email":"some@something.com", "old_password":"12345", "new_password":"45678"}
 Response:{
@@ -345,7 +345,7 @@ Response:{
 #### Change name:
 
 ```
-URL: http://166.62.32.120:5000/user/change_name/
+URL: http://172.104.89.56:5000/user/change_name/
 Method: PUT
 POST Format: {"name":"Good Name"}
 Response:{
@@ -357,7 +357,7 @@ Response:{
 #### Upload device_token
 
 ```
-URL: http://166.62.32.120:5000/user/device_token/
+URL: http://172.104.89.56:5000/user/device_token/
 Method:POST
 POST Format: {"device_token":"abc123213lkuiouaewrasdfa"}
 Response:{
@@ -369,7 +369,7 @@ Response:{
 #### Update device_token
 
 ```
-URL: http://166.62.32.120:5000/user/device_token/
+URL: http://172.104.89.56:5000/user/device_token/
 Method:PUT
 POST Format: {"device_token":"abadsfadsfadfkuiouaewrasdfa"}
 Response:{
@@ -384,7 +384,7 @@ Response:{
 #### Add a board
 
 ```
-URL:http://166.62.32.120:5000/board/
+URL:http://172.104.89.56:5000/board/
 Method: POST
 POST Format: {"board_name":"Computer Architecure"}
 Response:{
@@ -397,7 +397,7 @@ Response:{
 #### Delete a board
 
 ```
-URL:http://166.62.32.120:5000/board/
+URL:http://172.104.89.56:5000/board/
 Method: DELETE
 POST Format: {"board_id":"4"}
 Response:{
@@ -410,7 +410,7 @@ Response:{
 #### Change name of the board
 
 ```
-URL:http://166.62.32.120:5000/board/
+URL:http://172.104.89.56:5000/board/
 Method: PUT
 PUT Format: {"board_id":"5","board_name":"Communication in multil-culture"}
 Response:{
@@ -425,7 +425,7 @@ Response:{
 #### Add member to a board
 
 ```
-URL:http://166.62.32.120:5000/member/
+URL:http://172.104.89.56:5000/member/
 Method: POST
 POST Format: {"board_id":"5","user_email":"some@something.com"}
 Response: {
@@ -439,7 +439,7 @@ Above POST will add foo@bar.com to board with its id == 1
 #### Delete member from a board
 
 ```
-URL:http://166.62.32.120:5000/member/
+URL:http://172.104.89.56:5000/member/
 Method: DELETE
 POST Format: {"board_id":"1","user_email":"some@good.com"}
 Response:{
@@ -455,7 +455,7 @@ Above DELETE operation will remove user foo@bar.com from board with its id == 1,
 #### Add a todo to a board
 
 ```
-URL:http://166.62.32.120:5000/todo/
+URL:http://172.104.89.56:5000/todo/
 Method: POST
 POST Format:{"board_id":"1","item":"Meeting at Friday"}
 Response: {
@@ -467,7 +467,7 @@ Response: {
 #### Delete a todo
 
 ```
-URL:http://166.62.32.120:5000/todo/
+URL:http://172.104.89.56:5000/todo/
 Method: DELETE
 POST Format: {"todo_id":"1"}
 Response: {
@@ -481,7 +481,7 @@ Only the todo_id is needed for deleting, the server can detect which board the t
 #### Change name of a todo
 
 ```
-URL:http://166.62.32.120:5000/todo/
+URL:http://172.104.89.56:5000/todo/
 Method: PUT
 POST Format: {"todo_id":"1", "todo_item":"New todo item"}
 Response: {
@@ -494,7 +494,7 @@ Response: {
 #### Move todo to ongoing
 
 ```
-URL:http://166.62.32.120:5000/todo/move_to_ongoing/
+URL:http://172.104.89.56:5000/todo/move_to_ongoing/
 Method: POST
 POST Format:{"todo_id":"2"}
 Response: {
@@ -507,7 +507,7 @@ Response: {
 #### Move ongoing to done
 
 ```
-URL:http://166.62.32.120:5000/todo/move_to_done/
+URL:http://172.104.89.56:5000/todo/move_to_done/
 Method: POST
 POST Format:{"todo_ongoing_id":"3"}
 Response: {
@@ -519,7 +519,7 @@ Response: {
 #### Thankyou
 
 ```
-URL:http://166.62.32.120:5000/todo/thankyou/
+URL:http://172.104.89.56:5000/todo/thankyou/
 Method: POST
 POST Format:{"todo_done_id":"1"}
 Response:{
@@ -534,7 +534,7 @@ Response:{
 #### Add a memo to a board
 
 ```
-URL:http://166.62.32.120:5000/memo/
+URL:http://172.104.89.56:5000/memo/
 Method: POST
 POST Format:{"board_id":"1","title":"memo2","content":"철학적인 관점에서 세계는 실재를 이루는 모든 것다."}
 Response:{
@@ -546,7 +546,7 @@ Response:{
 #### Delete a memo
 
 ```
-URL:http://166.62.32.120:5000/memo/
+URL:http://172.104.89.56:5000/memo/
 Method: DELETE
 POST Format:{"memo_id":"2"}
 Response:{
@@ -558,7 +558,7 @@ Response:{
 #### Update a memo
 
 ```
-URL:http://166.62.32.120:5000/memo/
+URL:http://172.104.89.56:5000/memo/
 Method: PUT
 POST Format:{"memo_id":"1", "title":"new title", "content":"new content"}
 Response:{
@@ -573,7 +573,7 @@ Response:{
 #### Add a meetup to a board
 
 ```
-URL:http://166.62.32.120.5000/meetup/
+URL:http://172.104.89.56.5000/meetup/
 Method: POST
 POST Format: {"board_id":"1","location":"room-101","start_time":"2017-04-23 09:30:21", "end_time":"2017-04-23 12:00:00"}
 Response:{
@@ -607,7 +607,7 @@ Response on successful match:responseObject = {
 #### Delete meetup within a board
 
 ```
-URL:http://166.62.32.120:5000/meetup/
+URL:http://172.104.89.56:5000/meetup/
 Method: DELETE
 POST Format: {"board_id":"1"}
 Response:{
@@ -622,7 +622,7 @@ Response:{
 #### Get signature for uploading file to file storage server
 
 ```
-URL:http://166.62.32.120:5000/upload/
+URL:http://172.104.89.56:5000/upload/
 Method: GET
 Response:{
   "status": "success",
@@ -635,7 +635,7 @@ Response:{
 
 Metadata means the file name, file path, access_url. file path is the only identifier that we can tracking a file in file storage server, access url is the location that we can download the file from file storage server, file name is the name in a board.
 ```
-URL:http://166.62.32.120:5000/upload/
+URL:http://172.104.89.56:5000/upload/
 Method: POST
 POST Format: {"board_id":"1", "file_path":"/some@naver.com_123433234", "file_name_in_board":"soft.docx", "access_url":"http://getmyfile/soft.docx"}
 Response:{
@@ -648,7 +648,7 @@ Response:{
 #### Delete a file
 
 ```
-URL:http://166.62.32.120:5000/upload/
+URL:http://172.104.89.56:5000/upload/
 Method: DELETE
 POST Format: {"board_id":"1", "file_path":"/some@naver.com_123433234"}
 Response:{
